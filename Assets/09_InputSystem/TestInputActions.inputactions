@@ -1,0 +1,131 @@
+{
+    "name": "TestInputActions",
+    "maps": [
+        {
+            "name": "Test",
+            "id": "b8d4b10c-5048-4be8-92e4-d1cdf1f719a6",
+            "actions": [
+                {
+                    "name": "onTest1",
+                    "type": "Button",
+                    "id": "f5a8f05a-c119-4241-a69d-5c35f7372d45",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "onTest2",
+                    "type": "Button",
+                    "id": "f42e2266-e754-4d64-b907-82af935d7d02",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "onTest3",
+                    "type": "Button",
+                    "id": "c91c321f-1a7f-4629-9f98-4fc9783e8fab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "onTest4",
+                    "type": "Button",
+                    "id": "679de5b2-7417-4aa2-b832-d7cad098e777",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "onTest5",
+                    "type": "Button",
+                    "id": "1e9aa20e-21de-4dfe-b8bd-21541e09c54c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d600f7d5-90b8-4f8b-8d0b-ac64cd7d2db4",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Test",
+                    "action": "onTest1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f759092-d282-4fd0-8a1b-05cdaf3f806f",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Test",
+                    "action": "onTest2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98516a0c-abea-42e4-9f1e-8a0d61e19656",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Test",
+                    "action": "onTest3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4784624-5cea-4d7e-8f36-e7ac19ee4b77",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Test",
+                    "action": "onTest4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8407c9bf-94eb-4f1c-a068-bef668e0b91f",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Test",
+                    "action": "onTest5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Test",
+            "bindingGroup": "Test",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
