@@ -9,6 +9,6 @@ public class TestPlayer : TestBase
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        player.parryTime_cur = 0;
+        player.parryTime_cur = 0; 
     }
 }
