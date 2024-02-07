@@ -273,7 +273,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153122768}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.49988312, y: -0.000000014902326, z: 0.000000008601179, w: 0.8660929}
+  m_LocalRotation: {x: 0.49988312, y: 0.000000014902323, z: -0.000000008601178, w: 0.8660929}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1095,6 +1095,7 @@ MonoBehaviour:
   parryTime_origin: 0.5
   parryTime_cur: 0
   moveSpeed: 5
+  rotationSpeed: 2
   moveX: 0
   moveZ: 0
   mainCameraTr: {fileID: 963194228}

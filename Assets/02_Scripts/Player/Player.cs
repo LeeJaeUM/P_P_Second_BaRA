@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     Vector3 moveDirection;
     public float moveSpeed = 5;
+    public float rotationSpeed = 2;
 
     public float moveX = 0;     //이동 적용되는지 확인용 변수 SetInput에서 사용중
     public float moveZ = 0;
@@ -52,23 +53,31 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+        Rotation();
     }
     void Move()
     {
         // 카메라의 전방 방향을 기준으로 이동 방향을 조정
         Vector3 cameraForward = mainCameraTr.forward;
-        cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
-        cameraForward.x = 0; // 수평 방향으로만 이동해야 하므로 x값은 0으로 설정
-        Quaternion rotation = Quaternion.LookRotation(cameraForward);
-        Vector3 _moveDirRTCamera = rotation * moveDirection;
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+       // cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+        
+        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
+       // Vector3 _moveDirRTCamera = rotation * moveDirection;
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection);
 
     }
+
+    void Rotation()
+    {
+        // Vector3 cameraForward = mainCameraTr.forward;
+        //transform.forward = cameraForward;
+    }
     /// <summary>
-     /// 이동 입력 처리용 함수
-     /// </summary>
-     /// <param name="input">입력된 방향</param>
-     /// <param name="isMove">이동 중이면 true, 이동 중이 아니면 false</param>
+    /// 이동 입력 처리용 함수
+    /// </summary>
+    /// <param name="input">입력된 방향</param>
+    /// <param name="isMove">이동 중이면 true, 이동 중이 아니면 false</param>
     void SetInput(Vector2 input, bool isMove)
     {
         moveX = input.x;
