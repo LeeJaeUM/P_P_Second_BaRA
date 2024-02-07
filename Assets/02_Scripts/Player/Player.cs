@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     PlayerInputActions inputActions;
+    Rigidbody rigid;
 
     public float maxHP = 50;
     [SerializeField] private float curHp;
@@ -27,10 +29,16 @@ public class Player : MonoBehaviour
     public float parryTime_origin = 2.0f;
     public float parryTime_cur = 0.0f;
 
+    Vector3 moveDirection;
+    public float moveSpeed = 5;
+
+    public float moveX = 0;     //이동 적용되는지 확인용 변수 SetInput에서 사용중
+    public float moveZ = 0;
 
     private void Awake()
     {
         inputActions = new PlayerInputActions();
+        rigid = GetComponent<Rigidbody>();
         HP = maxHP;
     }
 
@@ -39,10 +47,34 @@ public class Player : MonoBehaviour
         ParryTimer();
     }
 
+    private void FixedUpdate()
+    {
+        Move();
+    }
+    void Move()
+    {
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection);
+    }
+    /// <summary>
+     /// 이동 입력 처리용 함수
+     /// </summary>
+     /// <param name="input">입력된 방향</param>
+     /// <param name="isMove">이동 중이면 true, 이동 중이 아니면 false</param>
+    void SetInput(Vector2 input, bool isMove)
+    {
+        moveX = input.x;
+        moveZ = input.y;
+        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
+       // animator.SetBool(IsMoveHash, isMove);
+
+    }
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMoveInput;
+        inputActions.Player.Move.canceled += OnMoveInput;
         inputActions.Player.Attack.performed += OnAttackInput;
         inputActions.Player.StrongAttack.performed += OnStrongAttackInput;
         inputActions.Player.Guard.started += OnGuardInput;
@@ -55,8 +87,15 @@ public class Player : MonoBehaviour
         inputActions.Player.Guard.started -= OnGuardInput;
         inputActions.Player.StrongAttack.performed -= OnStrongAttackInput;
         inputActions.Player.Attack.performed -= OnAttackInput;
+        inputActions.Player.Move.canceled -= OnMoveInput;
         inputActions.Player.Move.performed -= OnMoveInput;
         inputActions.Player.Disable();
+    }
+
+    private void OnMoveInput(InputAction.CallbackContext context)
+    {
+        SetInput(context.ReadValue<Vector2>(), !context.canceled);
+
     }
 
     private void OnStrongAttackInput(InputAction.CallbackContext context)
@@ -74,11 +113,6 @@ public class Player : MonoBehaviour
     private void OnAttackInput(InputAction.CallbackContext context)
     {
         Debug.Log("attack");
-    }
-
-    private void OnMoveInput(InputAction.CallbackContext context)
-    {
-        Debug.Log("move");
     }
 
     private void OnGuardInput(InputAction.CallbackContext context)

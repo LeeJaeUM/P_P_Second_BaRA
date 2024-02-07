@@ -26,8 +26,20 @@ public class Sandbag : MonoBehaviour
         }
     }
 
-    void SandbagAttack_able()
+    void SandbagAttack_Right_A()
     {
         sphereColliders[0].enabled = true;
+    }
+    void SandbagAttack_Left_A()
+    {
+        sphereColliders[1].enabled = true;
+    }
+    void SandbagAttack_Right_D()
+    {
+        sphereColliders[0].enabled = false;
+    }
+    void SandbagAttack_Left_D()
+    {
+        sphereColliders[1].enabled = false;
     }
 }

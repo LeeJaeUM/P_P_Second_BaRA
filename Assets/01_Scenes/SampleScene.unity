@@ -511,6 +511,9 @@ MonoBehaviour:
   isGuardAble: 0
   parryTime_origin: 0.5
   parryTime_cur: 0
+  moveSpeed: 5
+  moveX: 0
+  moveZ: 0
 --- !u!65 &1275236881
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -566,7 +569,7 @@ Animator:
   m_GameObject: {fileID: 1275236879}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 05977e2809647e1419d52dd0b69fc76e, type: 3}
-  m_Controller: {fileID: 9100000, guid: eedd95950d7c15e4eb7d88267e566406, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0caeea8bd4fa44f4f9fd97531baa98c7, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -586,7 +589,7 @@ Rigidbody:
   m_GameObject: {fileID: 1275236879}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.01
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -603,7 +606,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!1 &1402884408
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +809,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vanguard By T. Choonyung
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: 05977e2809647e1419d52dd0b69fc76e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -869,8 +873,16 @@ PrefabInstance:
       value: Sandbag
       objectReference: {fileID: 0}
     - target: {fileID: 7958880074624865277, guid: 70505c5c176c2ec4e8cc082ac9d7c858, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7958880074624865277, guid: 70505c5c176c2ec4e8cc082ac9d7c858, type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7977912641829691529, guid: 70505c5c176c2ec4e8cc082ac9d7c858, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7977912641829691529, guid: 70505c5c176c2ec4e8cc082ac9d7c858, type: 3}
       propertyPath: m_IsTrigger
