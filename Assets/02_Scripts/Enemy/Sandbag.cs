@@ -6,11 +6,13 @@ public class Sandbag : MonoBehaviour
 {
     Animator anim;
     WaitForSeconds delay20 = new WaitForSeconds(2.0f);
+    [SerializeField] SphereCollider[] sphereColliders;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         StartCoroutine(SandbagAttack());
+        sphereColliders = GetComponentsInChildren<SphereCollider>();
     }
 
     IEnumerator SandbagAttack()
@@ -22,5 +24,10 @@ public class Sandbag : MonoBehaviour
             anim.SetTrigger("Attack_Db");
             yield return delay20;
         }
+    }
+
+    void SandbagAttack_able()
+    {
+        sphereColliders[0].enabled = true;
     }
 }

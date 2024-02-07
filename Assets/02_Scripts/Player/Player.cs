@@ -59,6 +59,28 @@ public class Player : MonoBehaviour
         inputActions.Player.Disable();
     }
 
+    private void OnStrongAttackInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("강공  꾹 누름");
+        }
+        if (context.canceled)
+        {
+            Debug.Log("강공 시간 다됨!!_");
+        }
+    }
+
+    private void OnAttackInput(InputAction.CallbackContext context)
+    {
+        Debug.Log("attack");
+    }
+
+    private void OnMoveInput(InputAction.CallbackContext context)
+    {
+        Debug.Log("move");
+    }
+
     private void OnGuardInput(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -88,6 +110,7 @@ public class Player : MonoBehaviour
     {
         parryTime_cur = 0;
         isParryAble = false;
+        Debug.Log("ParryTimerReset");
     }
 
     void GuardComplete()    //가드 성공 시 패리 가능 시간 소폭 연장
@@ -95,25 +118,11 @@ public class Player : MonoBehaviour
         parryTime_cur -= 0.1f;
     }
 
-    private void OnStrongAttackInput(InputAction.CallbackContext context)
+    private void OnTriggerEnter(Collider other)
     {
-        if (context.performed)
+        if (other.CompareTag("EnemyAttack"))
         {
-            Debug.Log("강공  꾹 누름");
+            ParryTimerReset();
         }
-        if (context.canceled)
-        {
-            Debug.Log("강공 시간 다됨!!_");
-        }
-    }
-
-    private void OnAttackInput(InputAction.CallbackContext context)
-    {
-        Debug.Log("attack");
-    }
-
-    private void OnMoveInput(InputAction.CallbackContext context)
-    {
-        Debug.Log("move");
     }
 }
