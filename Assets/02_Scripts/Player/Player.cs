@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     public float moveX = 0;     //이동 적용되는지 확인용 변수 SetInput에서 사용중
     public float moveZ = 0;
 
+    public Transform mainCameraTr;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -53,7 +55,14 @@ public class Player : MonoBehaviour
     }
     void Move()
     {
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection);
+        // 카메라의 전방 방향을 기준으로 이동 방향을 조정
+        Vector3 cameraForward = mainCameraTr.forward;
+        cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+        cameraForward.x = 0; // 수평 방향으로만 이동해야 하므로 x값은 0으로 설정
+        Quaternion rotation = Quaternion.LookRotation(cameraForward);
+        Vector3 _moveDirRTCamera = rotation * moveDirection;
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+
     }
     /// <summary>
      /// 이동 입력 처리용 함수
