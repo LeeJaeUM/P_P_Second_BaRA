@@ -10,5 +10,6 @@ public class LockonPos : MonoBehaviour
     void Test()
     {
         Vector3 dir = playerTr.position - enemyTr.position;
+
     }
 }

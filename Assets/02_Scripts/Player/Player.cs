@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     public float parryTime_origin = 2.0f;
     public float parryTime_cur = 0.0f;
 
-    Vector3 moveDirection;
+    Vector3 moveDirection = Vector3.zero;
     public float moveSpeed = 5;
     public float rotationSpeed = 2;
 
@@ -138,21 +138,13 @@ public class Player : MonoBehaviour
         cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
         cameraRight.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
 
-        //Quaternion rotation = Quaternion.LookRotation(cameraForward,0, );
-        //Vector3 _moveDirRTCamera = rotation * moveDirection;
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection.z * transform.forward);
+        Vector3 movement = (cameraForward * moveZ +  cameraRight * moveX).normalized;
 
-        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
-        //Vector3 _moveDirRTCamera = rotation * moveDirection;
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera.normalized);
-
-        Vector3 _moveDirRTCamera = (cameraForward * moveZ + cameraRight * moveX).normalized;
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
-        //rigid.velocity = _moveDirRTCamera;
-
-        if (_moveDirRTCamera != Vector3.zero)
-            transform.forward = _moveDirRTCamera;
+        rigid.velocity = movement * moveSpeed;
+        if (movement != Vector3.zero)
+        {
+            transform.forward = movement;
+        }
     }
 
     /// <summary>
@@ -164,7 +156,7 @@ public class Player : MonoBehaviour
     {
         moveX = input.x;
         moveZ = input.y;
-        moveDirection = new Vector3(moveX, 0f, moveZ);
+        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
         //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
         anim.SetBool(IsMoveHash, isMove);
 
