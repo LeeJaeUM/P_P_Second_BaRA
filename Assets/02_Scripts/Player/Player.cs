@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     PlayerInputActions inputActions;
     Rigidbody rigid;
+    Animator anim;
 
     public float maxHP = 50;
     [SerializeField] private float curHp;
@@ -38,10 +39,13 @@ public class Player : MonoBehaviour
 
     public Transform mainCameraTr;
 
+    private int IsMoveHash = Animator.StringToHash("isMoving");
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
         rigid = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
         HP = maxHP;
     }
 
@@ -54,45 +58,7 @@ public class Player : MonoBehaviour
     {
         Move();
     }
-    void Move()
-    {
-        // 카메라의 전방 방향을 기준으로 이동 방향을 조정
-        Vector3 cameraForward = mainCameraTr.forward;
-        Vector3 cameraRight = mainCameraTr.right;
-        cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
-        cameraRight.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
 
-        //Quaternion rotation = Quaternion.LookRotation(cameraForward,0, );
-        //Vector3 _moveDirRTCamera = rotation * moveDirection;
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection.z * transform.forward);
-
-        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
-        //Vector3 _moveDirRTCamera = rotation * moveDirection;
-        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera.normalized);
-
-        Vector3 _moveDirRTCamera = (cameraForward * moveZ + cameraRight * moveX).normalized;
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
-        //rigid.velocity = _moveDirRTCamera;
-        
-        if(_moveDirRTCamera != Vector3.zero)
-            transform.forward = _moveDirRTCamera;
-    }
-
-    /// <summary>
-    /// 이동 입력 처리용 함수
-    /// </summary>
-    /// <param name="input">입력된 방향</param>
-    /// <param name="isMove">이동 중이면 true, 이동 중이 아니면 false</param>
-    void SetInput(Vector2 input, bool isMove)
-    {
-        moveX = input.x;
-        moveZ = input.y;
-        moveDirection = new Vector3(moveX, 0f, moveZ);
-        //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
-       // animator.SetBool(IsMoveHash, isMove);
-
-    }
 
     private void OnEnable()
     {
@@ -163,6 +129,49 @@ public class Player : MonoBehaviour
         }
     }
 
+    #region 이동관련 함수
+    void Move()
+    {
+        // 카메라의 전방 방향을 기준으로 이동 방향을 조정
+        Vector3 cameraForward = mainCameraTr.forward;
+        Vector3 cameraRight = mainCameraTr.right;
+        cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+        cameraRight.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+
+        //Quaternion rotation = Quaternion.LookRotation(cameraForward,0, );
+        //Vector3 _moveDirRTCamera = rotation * moveDirection;
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection.z * transform.forward);
+
+        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
+        //Vector3 _moveDirRTCamera = rotation * moveDirection;
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera.normalized);
+
+        Vector3 _moveDirRTCamera = (cameraForward * moveZ + cameraRight * moveX).normalized;
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+        //rigid.velocity = _moveDirRTCamera;
+
+        if (_moveDirRTCamera != Vector3.zero)
+            transform.forward = _moveDirRTCamera;
+    }
+
+    /// <summary>
+    /// 이동 입력 처리용 함수 
+    /// </summary>
+    /// <param name="input">입력된 방향</param>
+    /// <param name="isMove">이동 중이면 true, 이동 중이 아니면 false</param>
+    void SetInput(Vector2 input, bool isMove)
+    {
+        moveX = input.x;
+        moveZ = input.y;
+        moveDirection = new Vector3(moveX, 0f, moveZ);
+        //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
+        anim.SetBool(IsMoveHash, isMove);
+
+    }
+    #endregion
+
+
     #region 가드패리 함수 OnGuardInput, ontriggerEnter에서 사용
     void ParryTimer()   //패리 가능한 시간 계산 함수
     {
@@ -185,4 +194,6 @@ public class Player : MonoBehaviour
         parryTime_cur -= 0.1f;
     }
     #endregion
+
+
 }
