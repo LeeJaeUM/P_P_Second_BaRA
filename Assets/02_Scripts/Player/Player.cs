@@ -53,26 +53,32 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-        Rotation();
     }
     void Move()
     {
         // 카메라의 전방 방향을 기준으로 이동 방향을 조정
         Vector3 cameraForward = mainCameraTr.forward;
-       // cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
-        
-        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
-       // Vector3 _moveDirRTCamera = rotation * moveDirection;
+        Vector3 cameraRight = mainCameraTr.right;
+        cameraForward.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+        cameraRight.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
+
+        //Quaternion rotation = Quaternion.LookRotation(cameraForward,0, );
+        //Vector3 _moveDirRTCamera = rotation * moveDirection;
         //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection);
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection.z * transform.forward);
 
+        //Quaternion rotation = Quaternion.LookRotation(cameraForward);
+        //Vector3 _moveDirRTCamera = rotation * moveDirection;
+        //rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera.normalized);
+
+        Vector3 _moveDirRTCamera = (cameraForward * moveZ + cameraRight * moveX).normalized;
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * _moveDirRTCamera);
+        //rigid.velocity = _moveDirRTCamera;
+        
+        if(_moveDirRTCamera != Vector3.zero)
+            transform.forward = _moveDirRTCamera;
     }
 
-    void Rotation()
-    {
-        // Vector3 cameraForward = mainCameraTr.forward;
-        //transform.forward = cameraForward;
-    }
     /// <summary>
     /// 이동 입력 처리용 함수
     /// </summary>
@@ -82,7 +88,7 @@ public class Player : MonoBehaviour
     {
         moveX = input.x;
         moveZ = input.y;
-        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        moveDirection = new Vector3(moveX, 0f, moveZ);
         //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
        // animator.SetBool(IsMoveHash, isMove);
 
@@ -113,7 +119,6 @@ public class Player : MonoBehaviour
     private void OnMoveInput(InputAction.CallbackContext context)
     {
         SetInput(context.ReadValue<Vector2>(), !context.canceled);
-
     }
 
     private void OnStrongAttackInput(InputAction.CallbackContext context)
@@ -149,12 +154,22 @@ public class Player : MonoBehaviour
             isParryAble = false;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyAttack"))
+        {
+            ParryTimerReset();
+        }
+    }
+
+    #region 가드패리 함수 OnGuardInput, ontriggerEnter에서 사용
     void ParryTimer()   //패리 가능한 시간 계산 함수
     {
         if (isParryAble)    //패리가 가능할 때 parryTime_cur은 타이머 처럼 상승
             parryTime_cur += Time.deltaTime;
-        
-        if(parryTime_cur > parryTime_origin)    //패리 가능 시간을 넘기면 패리 불가능
+
+        if (parryTime_cur > parryTime_origin)    //패리 가능 시간을 넘기면 패리 불가능
             isParryAble = false;
     }
 
@@ -169,12 +184,5 @@ public class Player : MonoBehaviour
     {
         parryTime_cur -= 0.1f;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("EnemyAttack"))
-        {
-            ParryTimerReset();
-        }
-    }
+    #endregion
 }
