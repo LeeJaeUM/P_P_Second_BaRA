@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
 
     private int IsMoveHash = Animator.StringToHash("isMoving");
 
+    public bool isLockon = false;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -69,7 +71,9 @@ public class Player : MonoBehaviour
         inputActions.Player.StrongAttack.performed += OnStrongAttackInput;
         inputActions.Player.Guard.started += OnGuardInput;
         inputActions.Player.Guard.canceled += OnGuardInput;
+        inputActions.Player.Lockon.performed += OnLockonInput;
     }
+
 
     private void OnDisable()
     {
@@ -87,6 +91,10 @@ public class Player : MonoBehaviour
         SetInput(context.ReadValue<Vector2>(), !context.canceled);
     }
 
+    private void OnLockonInput(InputAction.CallbackContext context)
+    {
+        isLockon = !isLockon;
+    }
     private void OnStrongAttackInput(InputAction.CallbackContext context)
     {
         if (context.performed)
