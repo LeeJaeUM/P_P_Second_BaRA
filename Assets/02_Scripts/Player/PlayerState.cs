@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
+    [SerializeField] float curNanoGuage = 0;
+    [SerializeField] float maxNanoGuage = 10;
+
     private void Awake()
     {
         Player player = GetComponent<Player>();
@@ -13,5 +16,6 @@ public class PlayerState : MonoBehaviour
     private void Tets()
     {
         Debug.Log("테스트 액션");
+        curNanoGuage++;
     }
 }
