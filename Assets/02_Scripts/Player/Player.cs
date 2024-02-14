@@ -43,6 +43,14 @@ public class Player : MonoBehaviour
 
     public bool isLockon = false;
 
+    enum PGState
+    {
+        None,
+        Parry,
+        Guard
+    }
+    [SerializeField] PGState pgState = PGState.None;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -55,6 +63,7 @@ public class Player : MonoBehaviour
     {
         ParryTimer();
     }
+
 
     private void FixedUpdate()
     {
@@ -116,14 +125,14 @@ public class Player : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("가드 누름");
+            //Debug.Log("가드 누름");
             isGuardAble = true;
             isParryAble = true;
         }
         
         if(context.canceled)
         {
-            Debug.Log("가드 뗌__");
+            //Debug.Log("가드 뗌__");
             isGuardAble = false;
             isParryAble = false;
         }
@@ -133,7 +142,19 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag("EnemyAttack"))
         {
-            ParryTimerReset();
+            if(isParryAble)
+            {
+                ParryTimerReset();
+            }
+            else if (isGuardAble)
+            {
+                GuardComplete();
+            }
+            else
+            {
+                ParryTimerReset();
+            }
+                
         }
     }
 
