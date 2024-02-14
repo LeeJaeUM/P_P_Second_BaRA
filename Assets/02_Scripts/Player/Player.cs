@@ -43,13 +43,7 @@ public class Player : MonoBehaviour
 
     public bool isLockon = false;
 
-    enum PGState
-    {
-        None,
-        Parry,
-        Guard
-    }
-    [SerializeField] PGState pgState = PGState.None;
+    public Action onParry;
 
     private void Awake()
     {
@@ -137,22 +131,29 @@ public class Player : MonoBehaviour
             isParryAble = false;
         }
     }
-
+    /// <summary>
+    /// 피격 시 관리
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EnemyAttack"))
         {
             if(isParryAble)
             {
+                onParry?.Invoke();
                 ParryTimerReset();
+                Debug.Log("패리성공");
             }
             else if (isGuardAble)
             {
                 GuardComplete();
+                Debug.Log("가드로 막음");
             }
             else
             {
                 ParryTimerReset();
+                Debug.Log("그냥 맞아버림");
             }
                 
         }
@@ -207,7 +208,6 @@ public class Player : MonoBehaviour
     {
         parryTime_cur = 0;
         isParryAble = false;
-        Debug.Log("ParryTimerReset");
     }
 
     void GuardComplete()    //가드 성공 시 패리 가능 시간 소폭 연장
