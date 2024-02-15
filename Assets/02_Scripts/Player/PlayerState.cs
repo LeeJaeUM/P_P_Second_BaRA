@@ -17,5 +17,6 @@ public class PlayerState : MonoBehaviour
     {
         Debug.Log("테스트 액션");
         curNanoGuage++;
+
     }
 }

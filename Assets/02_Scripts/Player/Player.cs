@@ -44,7 +44,12 @@ public class Player : MonoBehaviour
     private int InputZHash = Animator.StringToHash("InputZ");
     private int InputXHash = Animator.StringToHash("InputX");
     private int IsAttackHash = Animator.StringToHash("isAttack");
+    private int AttackComboHash = Animator.StringToHash("AttackCombo");
+    private int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
 
+    private int curCombo = 0;
+    private bool isAttack = false;
+    
     public bool isLockon = false;
 
     public Action onParry;
@@ -111,9 +116,7 @@ public class Player : MonoBehaviour
     }
     private void OnAttackInput(InputAction.CallbackContext context)
     {
-        Debug.Log("attack");
-        anim.SetBool(IsAttackHash, true);
-        StartCoroutine(AnimationControll());
+        AttackStart();
     }
     private void OnGuardInput(InputAction.CallbackContext context)
     {
@@ -218,19 +221,41 @@ public class Player : MonoBehaviour
     #endregion
 
     #region 공격관련 함수
-
-    IEnumerator AnimationControll()
+            
+    void AttackStart()
     {
-        Debug.Log("aaaaaaaaa");
-        while (anim.GetCurrentAnimatorClipInfo(0).Length < 0.9)
+        if (isAttack)   //이미 공격중이라면 = 콤보공격 시전
         {
-            if (anim.GetCurrentAnimatorClipInfo(0).LongLength > 0.4)
+            Debug.Log("TTTTTETE 1");
+            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f &&
+                anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4f)
             {
-                Debug.Log("DDDD");
+                Debug.Log("TTTTTETE 2");
+                curCombo++;
+                anim.SetInteger(AttackComboHash, curCombo);
             }
-            yield return null;
         }
-
+        else            //처음 공격 하는 거라면
+        {
+            Debug.Log("TTTTTETE 3");
+            isAttack = true;
+            curCombo++;
+            anim.SetInteger(AttackComboHash, curCombo);
+            anim.SetBool(IsAttackHash, isAttack);
+        }
+        Debug.Log("TTTTTETE 4");
     }
+
+    /// <summary>
+    /// 애니메이션 종료 시점에실행할 애니메이션 이벤트 함수
+    /// </summary>
+    void AttackEnd()
+    {
+        isAttack = false;
+        curCombo = 0;
+        anim.SetInteger(AttackComboHash, curCombo);
+        anim.SetBool(IsAttackHash, isAttack);
+    }
+
     #endregion
 }
