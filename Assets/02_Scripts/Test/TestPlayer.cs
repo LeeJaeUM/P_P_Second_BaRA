@@ -11,4 +11,9 @@ public class TestPlayer : TestBase
     {
         player.parryTime_cur = 0; 
     }
+
+    protected override void OnTest2(InputAction.CallbackContext context)
+    {
+        player.AttackMove();
+    }
 }

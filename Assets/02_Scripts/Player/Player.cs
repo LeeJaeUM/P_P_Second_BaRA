@@ -172,8 +172,12 @@ public class Player : MonoBehaviour
         cameraRight.y = 0; // 수평 방향으로만 이동해야 하므로 y값은 0으로 설정
 
         Vector3 movement = (cameraForward * moveZ +  cameraRight * moveX).normalized;
+        moveDirection = movement;
+        if (!isAttack)
+        {
+            rigid.velocity = movement * moveSpeed;
+        }
 
-        rigid.velocity = movement * moveSpeed;
         if (movement != Vector3.zero)
         {
             transform.forward = movement;
@@ -189,8 +193,9 @@ public class Player : MonoBehaviour
     {
         moveX = input.x;
         moveZ = input.y;
-        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        //moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
         //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
+        
         anim.SetBool(IsMoveHash, isMove);
         anim.SetFloat(InputZHash, moveZ);
         anim.SetFloat(InputXHash, moveX);
@@ -227,10 +232,11 @@ public class Player : MonoBehaviour
         if (isAttack)   //이미 공격중이라면 = 콤보공격 시전
         {
             Debug.Log("TTTTTETE 1");
-            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f &&
-                anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4f)
+            if (anim.GetCurrentAnimatorStateInfo(1).normalizedTime > 0.5f
+                && anim.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f)
             {
                 Debug.Log("TTTTTETE 2");
+                isAttack = true;
                 curCombo++;
                 anim.SetInteger(AttackComboHash, curCombo);
             }
@@ -255,6 +261,17 @@ public class Player : MonoBehaviour
         curCombo = 0;
         anim.SetInteger(AttackComboHash, curCombo);
         anim.SetBool(IsAttackHash, isAttack);
+    }
+
+    public void AttackMove()
+    {
+        rigid.AddForce(moveDirection * 3, ForceMode.Impulse);
+    }
+
+    public void ComboReset()
+    {
+        curCombo = 0;
+        anim.SetInteger(AttackComboHash, curCombo);
     }
 
     #endregion
