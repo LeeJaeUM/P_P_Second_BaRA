@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     public Transform mainCameraTr;
 
     private int IsMoveHash = Animator.StringToHash("isMoving");
+    private int InputZHash = Animator.StringToHash("InputZ");
 
     public bool isLockon = false;
 
@@ -189,7 +190,7 @@ public class Player : MonoBehaviour
         moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
         //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
         anim.SetBool(IsMoveHash, isMove);
-
+        anim.SetFloat(InputZHash, moveZ);
     }
     #endregion
 
