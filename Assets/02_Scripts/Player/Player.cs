@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
 
     private int IsMoveHash = Animator.StringToHash("isMoving");
     private int InputZHash = Animator.StringToHash("InputZ");
+    private int InputXHash = Animator.StringToHash("InputX");
+    private int IsAttackHash = Animator.StringToHash("isAttack");
 
     public bool isLockon = false;
 
@@ -59,12 +62,10 @@ public class Player : MonoBehaviour
         ParryTimer();
     }
 
-
     private void FixedUpdate()
     {
         Move();
     }
-
 
     private void OnEnable()
     {
@@ -77,7 +78,6 @@ public class Player : MonoBehaviour
         inputActions.Player.Guard.canceled += OnGuardInput;
         inputActions.Player.Lockon.performed += OnLockonInput;
     }
-
 
     private void OnDisable()
     {
@@ -94,7 +94,6 @@ public class Player : MonoBehaviour
     {
         SetInput(context.ReadValue<Vector2>(), !context.canceled);
     }
-
     private void OnLockonInput(InputAction.CallbackContext context)
     {
         isLockon = !isLockon;
@@ -110,12 +109,12 @@ public class Player : MonoBehaviour
             Debug.Log("강공 시간 다됨!!_");
         }
     }
-
     private void OnAttackInput(InputAction.CallbackContext context)
     {
         Debug.Log("attack");
+        anim.SetBool(IsAttackHash, true);
+        StartCoroutine(AnimationControll());
     }
-
     private void OnGuardInput(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -191,6 +190,7 @@ public class Player : MonoBehaviour
         //Debug.Log($"moveDirection.x = {moveDirection.x}, moveDirection.y = {moveDirection.y}, moveDirection.z = {moveDirection.z}");
         anim.SetBool(IsMoveHash, isMove);
         anim.SetFloat(InputZHash, moveZ);
+        anim.SetFloat(InputXHash, moveX);
     }
     #endregion
 
@@ -217,5 +217,20 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    #region 공격관련 함수
 
+    IEnumerator AnimationControll()
+    {
+        Debug.Log("aaaaaaaaa");
+        while (anim.GetCurrentAnimatorClipInfo(0).Length < 0.9)
+        {
+            if (anim.GetCurrentAnimatorClipInfo(0).LongLength > 0.4)
+            {
+                Debug.Log("DDDD");
+            }
+            yield return null;
+        }
+
+    }
+    #endregion
 }
