@@ -29,6 +29,18 @@ public class GameManager : Singleton<GameManager>
             return player;
         }
     }
+    PlayerState playerState;
+    public PlayerState PlayerState
+    {
+        get
+        {
+            if(playerState == null)
+            {
+                playerState = FindAnyObjectByType<PlayerState>();
+            }
+            return playerState;
+        }
+    }
 
     private int score;
 

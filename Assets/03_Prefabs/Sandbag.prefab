@@ -582,3 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af6281856c0b244b98fe1784616b6b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curHp: 0
+  maxHp: 20
+  ATK: 10
+  gold: 10

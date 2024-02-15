@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
 
     public Action onParry;
 
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -275,4 +276,5 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
 }
