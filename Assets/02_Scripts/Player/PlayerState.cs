@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     [SerializeField] float curNanoGuage = 0;
-    [SerializeField] float maxNanoGuage = 10;
+    //[SerializeField] float maxNanoGuage = 10;
 
     [SerializeField] private int gold = 100;
     public int Gold
