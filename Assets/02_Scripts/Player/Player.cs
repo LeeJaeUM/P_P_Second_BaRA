@@ -8,9 +8,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    PlayerInputActions inputActions;
-    Rigidbody rigid;
-    Animator anim;
+
 
     public float maxHP = 50;
     [SerializeField] private float curHp;
@@ -54,6 +52,11 @@ public class Player : MonoBehaviour
 
     public Action onParry;
 
+    bool isHitAble = true;
+
+    PlayerInputActions inputActions;
+    Rigidbody rigid;
+    Animator anim;
 
     private void Awake()
     {
@@ -139,27 +142,24 @@ public class Player : MonoBehaviour
     /// 피격 시 관리
     /// </summary>
     /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
+
+    public void PlayerHited()
     {
-        if (other.CompareTag("EnemyAttack"))
+        if (isParryAble)
         {
-            if(isParryAble)
-            {
-                onParry?.Invoke();
-                ParryTimerReset();
-                Debug.Log("패리성공");
-            }
-            else if (isGuardAble)
-            {
-                GuardComplete();
-                Debug.Log("가드로 막음");
-            }
-            else
-            {
-                ParryTimerReset();
-                Debug.Log("그냥 맞아버림");
-            }
-                
+            onParry?.Invoke();
+            ParryTimerReset();
+            Debug.Log("패리성공");
+        }
+        else if (isGuardAble)
+        {
+            GuardComplete();
+            Debug.Log("가드로 막음");
+        }
+        else
+        {
+            ParryTimerReset();
+            Debug.Log("그냥 맞아버림");
         }
     }
 
