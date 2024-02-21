@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class PlayerHit : MonoBehaviour
     [SerializeField] CapsuleCollider[] hitColliders;
 
     GameManager gameManager;
+
+    public Action playerHit;
 
     private void Awake()
     {
@@ -36,7 +39,8 @@ public class PlayerHit : MonoBehaviour
     void OnHit(string name, float damageMul)
     {
         gameManager.isPlayerHit = true;
-        Debug.Log($"{name} 이 맞았다.");
+        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. ");
+        playerHit?.Invoke();
     }
 
 }
