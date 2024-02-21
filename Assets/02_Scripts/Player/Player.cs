@@ -52,7 +52,6 @@ public class Player : MonoBehaviour
 
     public Action onParry;
 
-    bool isHitAble = true;
 
     PlayerInputActions inputActions;
     Rigidbody rigid;
@@ -253,6 +252,7 @@ public class Player : MonoBehaviour
         Debug.Log("TTTTTETE 4");
     }
 
+
     /// <summary>
     /// 애니메이션 종료 시점에실행할 애니메이션 이벤트 함수
     /// </summary>
@@ -276,5 +276,10 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDamage(int damage)
+    {
+        HP -= damage;
+    }
 
 }

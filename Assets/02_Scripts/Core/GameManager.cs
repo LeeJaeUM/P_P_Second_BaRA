@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    public bool isPlayerHit;
     //public static GameManager Inst;
 
     //private void Awake()

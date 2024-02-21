@@ -6,9 +6,12 @@ using UnityEngine;
 public class HitCollider : MonoBehaviour
 {
     public CapsuleCollider hitCollider;
+    [SerializeField]
+    public int colliderCode = 0;
+    [SerializeField]
+    private float damageMultiplier = 1;
 
-    public Action OnHit;
-
+    public Action<string, float> OnHit;
     private void Start()
     {
         hitCollider = GetComponent<CapsuleCollider>();
@@ -18,8 +21,9 @@ public class HitCollider : MonoBehaviour
     {
         if (other.CompareTag("EnemyAttack"))
         {
-            OnHit?.Invoke();
-            Debug.Log($"{gameObject.name} 이 맞았다.");
+            if(!GameManager.Instance.isPlayerHit)
+                OnHit?.Invoke(gameObject.name, damageMultiplier);        
         }
     }
+
 }
