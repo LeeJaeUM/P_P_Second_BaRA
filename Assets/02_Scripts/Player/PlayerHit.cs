@@ -39,8 +39,11 @@ public class PlayerHit : MonoBehaviour
     void OnHit(string name, float damageMul, float damage)
     {
         gameManager.isPlayerHit = true;
-        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {damage}");
-        OnPlayerHit?.Invoke(damage);
+
+        //데미지계산식 (단순)
+        float finalDamage = damage * damageMul; 
+        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
+        OnPlayerHit?.Invoke(finalDamage);
     }
 
 }
