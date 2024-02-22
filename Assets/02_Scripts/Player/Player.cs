@@ -21,8 +21,23 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    [SerializeField] private float playerATK = 10;
+    /// <summary>
+    /// 플레이어의 공격력 , 후에 공격력 셋업 함수 추가 후 공격력 변경
+    /// Weapon에서 사용
+    /// </summary>
+    [SerializeField] private float playerAtk = 10;
+    public float ATK 
+    { 
+        get { return playerAtk; }
+        private set
+        {
+            if (playerAtk != value)
+            {
+                playerAtk = value;
+            }
+        }
+            
+    }
     [SerializeField] private float guardMultiplier = 0.5f;
     public bool isParryAble = false;
     public bool isGuardAble = false;

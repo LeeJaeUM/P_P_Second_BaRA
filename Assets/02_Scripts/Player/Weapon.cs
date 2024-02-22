@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : AttackAble
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float weaponDamageMultiplier = 1.0f;
+    protected override void Awake()
     {
-        
+        base.Awake();        
+        SetDamage(GameManager.Instance.Player.ATK);
     }
 
-    // Update is called once per frame
-    void Update()
+    //플레이어의 공격력으로 세팅하기 위한 함수
+    public void SetDamage(float ATK)
     {
-        
+        DefaultDamage = ATK * weaponDamageMultiplier;
     }
 }

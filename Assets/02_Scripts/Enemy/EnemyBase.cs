@@ -65,8 +65,13 @@ public class EnemyBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("PlayerAttack"))
-            EnemyHit(10);
+        //if(other.CompareTag("PlayerAttack"))
+        //    EnemyHit(10);
+        AttackAble attackAble = other.gameObject.GetComponent<AttackAble>();
+        if(attackAble != null)
+        {
+            EnemyHit(attackAble.DefaultDamage);
+        }
     }
 
     void EnemyDie()
