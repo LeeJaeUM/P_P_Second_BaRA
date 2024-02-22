@@ -41,18 +41,11 @@ public class HitCollider : MonoBehaviour
         EnemyBase enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
         if(enemyBase != null)
         {
-            Debug.Log("적의 공격이라고 판단됨!");
             hitDamage = enemyBase.ATK;
             if (!GameManager.Instance.isPlayerHit)
                 OnHit?.Invoke(gameObject.name, damageMultiplier, hitDamage);
         }
 
-        ///if (other.CompareTag("EnemyAttack"))
-        ///{
-        ///    //여기서 적 데미지를 가져오는 게 필요함
-        ///    if (!GameManager.Instance.isPlayerHit)
-        ///        OnHit?.Invoke(gameObject.name, damageMultiplier, hitDamage);
-        ///}
     }
 
 }

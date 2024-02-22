@@ -8,8 +8,6 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-
-
     public float maxHP = 50;
     [SerializeField] private float curHp;
     public float HP
@@ -24,6 +22,8 @@ public class Player : MonoBehaviour
         }
     }
 
+    [SerializeField] private float playerATK = 10;
+    [SerializeField] private float guardMultiplier = 0.5f;
     public bool isParryAble = false;
     public bool isGuardAble = false;
     public float parryTime_origin = 2.0f;
@@ -153,6 +153,7 @@ public class Player : MonoBehaviour
         }
         else if (isGuardAble)
         {
+            OnDamage(damage * guardMultiplier);
             GuardComplete();
             Debug.Log("가드로 막음");
         }
@@ -265,12 +266,17 @@ public class Player : MonoBehaviour
         anim.SetInteger(AttackComboHash, curCombo);
         anim.SetBool(IsAttackHash, isAttack);
     }
-
+    /// <summary>
+    /// 애니메이션 이벤트용 공격 시 이동하는 함수
+    /// </summary>
     public void AttackMove()
     {
         rigid.AddForce(moveDirection * 3, ForceMode.Impulse);
     }
 
+    /// <summary>
+    /// 애니메이션 이벤트용 콤보종료함수
+    /// </summary>
     public void ComboReset()
     {
         curCombo = 0;
@@ -279,6 +285,10 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 플레이어 체력 감소 함수
+    /// </summary>
+    /// <param name="damage"></param>
     private void OnDamage(float damage)
     {
         HP -= damage;

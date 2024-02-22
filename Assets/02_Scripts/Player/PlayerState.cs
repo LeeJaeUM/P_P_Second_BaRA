@@ -6,7 +6,6 @@ public class PlayerState : MonoBehaviour
 {
     [SerializeField] float curNanoGuage = 0;
     //[SerializeField] float maxNanoGuage = 10;
-
     [SerializeField] private int gold = 100;
     public int Gold
     {
@@ -19,6 +18,8 @@ public class PlayerState : MonoBehaviour
             } 
         }
     }
+
+
     private void Awake()
     {
         Player player = GetComponent<Player>();
@@ -27,10 +28,8 @@ public class PlayerState : MonoBehaviour
 
     private void Tets()
     {
-        Debug.Log("테스트 액션");
+        Debug.Log("패링 성공 테스트 액션");
         curNanoGuage++;
-
-
     }
 
     public void AddGold(int addGold)

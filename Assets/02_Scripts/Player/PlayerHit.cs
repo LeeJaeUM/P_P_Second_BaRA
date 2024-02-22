@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerHit : MonoBehaviour
 {
+    [SerializeField]
+    private float hitAbleTime = 0.2f;
+
     [SerializeField] HitCollider[] hitCols;
     //[SerializeField] CapsuleCollider[] hitColliders;
 
@@ -40,11 +43,18 @@ public class PlayerHit : MonoBehaviour
     {
         //중복피해를 방지하기 위한 게임매니저 불 변수 true로 변경
         gameManager.isPlayerHit = true;
-
+        StartCoroutine(ResetHitAbleTimeCo());
         //데미지계산식 (단순)
         float finalDamage = damage * damageMul; 
         Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
         OnPlayerHit?.Invoke(finalDamage);
+    }
+
+    //피격 활성화 코루틴
+    IEnumerator ResetHitAbleTimeCo()
+    {
+        yield return new WaitForSeconds(hitAbleTime);
+        gameManager.isPlayerHit = false;
     }
 
 }

@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] public float ATK = 10;
     [SerializeField] protected int gold = 10;
     PlayerState playerState;
+    Player player;
 
     Collider hitCollider;
 
@@ -45,6 +46,10 @@ public class EnemyBase : MonoBehaviour
         {
             onEnemyDie += AddPlayerGold;
         }
+        if(player == null)
+        {
+            player = GameManager.Instance.Player;
+        }
     }
 
 
@@ -60,7 +65,7 @@ public class EnemyBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("PlayerAttack"))
             EnemyHit(10);
     }
 
