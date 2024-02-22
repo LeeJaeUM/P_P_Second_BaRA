@@ -6,16 +6,16 @@ using UnityEngine;
 public class PlayerHit : MonoBehaviour
 {
     [SerializeField] HitCollider[] hitCols;
-    [SerializeField] CapsuleCollider[] hitColliders;
+    //[SerializeField] CapsuleCollider[] hitColliders;
 
     GameManager gameManager;
 
-    public Action playerHit;
+    public Action<float> OnPlayerHit;    //Player에서 패리에 사용
 
     private void Awake()
     {
-        hitCols = GetComponentsInChildren<HitCollider>();
-        hitColliders = new CapsuleCollider[hitCols.Length];
+        hitCols = GameManager.Instance.Player.GetComponentsInChildren<HitCollider>();
+       // hitColliders = new CapsuleCollider[hitCols.Length];
         gameManager = GameManager.Instance;
 
 
@@ -24,23 +24,23 @@ public class PlayerHit : MonoBehaviour
     {
         for (int i = 0; i < hitCols.Length; i++)    //피격 콜라이더 배열
         {
-            hitColliders[i] = hitCols[i].hitCollider;
+            //hitColliders[i] = hitCols[i].hitCollider;
             hitCols[i].OnHit += OnHit;
         }
     }
-    private void OnDisable()
-    {
-        for (int i = hitCols.Length; i > 0; i--)    //피격 콜라이더 배열
-        {
-            hitCols[i].OnHit -= OnHit;
-        }
-    }
+    //private void OnDisable()
+    //{
+    //    for (int i = hitCols.Length; i > 0; i--)    //피격 콜라이더 배열
+    //    {
+    //        hitCols[i].OnHit -= OnHit;
+    //    }
+    //}
 
-    void OnHit(string name, float damageMul)
+    void OnHit(string name, float damageMul, float damage)
     {
         gameManager.isPlayerHit = true;
-        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. ");
-        playerHit?.Invoke();
+        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {damage}");
+        OnPlayerHit?.Invoke(damage);
     }
 
 }

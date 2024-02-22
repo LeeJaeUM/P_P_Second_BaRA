@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     
     public bool isLockon = false;
 
-    public Action onParry;
+    public Action onParry;  //패리 성공시 발동액션 - PlayerState에서 사용
 
 
     PlayerInputActions inputActions;
@@ -63,6 +63,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         HP = maxHP;
+        GameManager.Instance.PlayerHit.OnPlayerHit += PlayerHited;
     }
 
     private void Update()
@@ -142,7 +143,7 @@ public class Player : MonoBehaviour
     /// </summary>
     /// <param name="other"></param>
 
-    public void PlayerHited()
+    public void PlayerHited(float damage)
     {
         if (isParryAble)
         {
@@ -157,6 +158,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            OnDamage(damage);
             ParryTimerReset();
             Debug.Log("그냥 맞아버림");
         }
@@ -277,7 +279,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    private void OnDamage(int damage)
+    private void OnDamage(float damage)
     {
         HP -= damage;
     }

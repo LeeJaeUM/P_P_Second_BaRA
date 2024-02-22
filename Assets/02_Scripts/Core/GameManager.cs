@@ -43,6 +43,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    PlayerHit playerHit;
+    public PlayerHit PlayerHit
+    {
+        get
+        {
+            if (playerHit == null)
+            {
+                playerHit = FindAnyObjectByType<PlayerHit>();
+            }
+            return playerHit;
+        }
+    }
+
     private int score;
 
     // 게임의 현재 점수를 가져오거나 설정하는 프로퍼티
