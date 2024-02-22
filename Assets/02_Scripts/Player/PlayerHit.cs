@@ -38,6 +38,7 @@ public class PlayerHit : MonoBehaviour
 
     void OnHit(string name, float damageMul, float damage)
     {
+        //중복피해를 방지하기 위한 게임매니저 불 변수 true로 변경
         gameManager.isPlayerHit = true;
 
         //데미지계산식 (단순)

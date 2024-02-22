@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sandbag : MonoBehaviour
+public class Sandbag : EnemyBase
 {
     Animator anim;
     WaitForSeconds delay20 = new WaitForSeconds(2.0f);
     [SerializeField] SphereCollider[] sphereColliders;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         anim = GetComponent<Animator>();
         StartCoroutine(SandbagAttack());
         sphereColliders = GetComponentsInChildren<SphereCollider>();

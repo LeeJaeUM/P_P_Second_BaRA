@@ -413,7 +413,6 @@ GameObject:
   - component: {fileID: 3488811830070166090}
   - component: {fileID: 5099367107188947609}
   - component: {fileID: 3368464270870161127}
-  - component: {fileID: 1881035182626264983}
   m_Layer: 0
   m_Name: Sandbag
   m_TagString: Enemy
@@ -569,20 +568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eab688d4feea9be4d9049a7b668c242b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereColliders: []
---- !u!114 &1881035182626264983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7084029594148116646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4af6281856c0b244b98fe1784616b6b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   curHp: 0
-  maxHp: 20
+  maxHp: 100
   ATK: 10
   gold: 10
+  sphereColliders: []

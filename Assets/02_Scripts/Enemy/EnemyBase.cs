@@ -8,7 +8,7 @@ public class EnemyBase : MonoBehaviour
 {
     [SerializeField] protected float curHp = 0;
     [SerializeField] protected float maxHp = 100;
-    //[SerializeField] private float ATK = 10;
+    [SerializeField] public float ATK = 10;
     [SerializeField] protected int gold = 10;
     PlayerState playerState;
 
