@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
-    [SerializeField] float curNanoGuage = 0;
-    //[SerializeField] float maxNanoGuage = 10;
+    [SerializeField] float curNanoGauge = 0;
+    [SerializeField] float maxNanoGuage = 10;
     [SerializeField] private int gold = 100;
+
+    public Action<float> OnNanoChange;
     public int Gold
     {
         get { return gold; } 
@@ -29,7 +32,14 @@ public class PlayerState : MonoBehaviour
     private void Tets()
     {
         Debug.Log("패링 성공 테스트 액션");
-        curNanoGuage++;
+        NanoChange(1);
+    }
+
+    private void NanoChange(float nano)
+    {
+        curNanoGauge += nano;
+        float sliderValue = Mathf.InverseLerp(0, maxNanoGuage, curNanoGauge);
+        OnNanoChange?.Invoke(sliderValue);
     }
 
     public void AddGold(int addGold)
