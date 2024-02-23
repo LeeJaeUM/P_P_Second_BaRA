@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 
     PlayerInputActions inputActions;
     Rigidbody rigid;
-    Animator anim;
+    public Animator anim;
 
     private void Awake()
     {
