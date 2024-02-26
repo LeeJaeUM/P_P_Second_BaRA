@@ -302,13 +302,13 @@ public class Player : MonoBehaviour
         anim.SetInteger(AttackComboHash, curCombo);
     }
 
-    void AttackCollider()
+    void PlayerWeaponCollider()
     {
 
-        StartCoroutine(AttackColliderCo());
+        StartCoroutine(PlayerWeaponCollider_Co());
     }
 
-    IEnumerator AttackColliderCo()
+    IEnumerator PlayerWeaponCollider_Co()
     {
         weapon.OnAttackCollider();
         yield return new WaitForSeconds(0.1f);
