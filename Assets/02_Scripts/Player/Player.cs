@@ -67,10 +67,13 @@ public class Player : MonoBehaviour
 
     public Action onParry;  //패리 성공시 발동액션 - PlayerState에서 사용
 
+    [Header("행동 가능한 지 판단")]
+    [SerializeField] private bool isInteraction = true;
 
+    Weapon weapon;
     PlayerInputActions inputActions;
     Rigidbody rigid;
-    public Animator anim;
+    Animator anim;
 
     private void Awake()
     {
@@ -79,6 +82,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         HP = maxHP;
         GameManager.Instance.PlayerHit.OnPlayerHit += PlayerHited;
+        weapon = GetComponentInChildren<Weapon>();  
     }
 
     private void Update()
@@ -296,6 +300,19 @@ public class Player : MonoBehaviour
     {
         curCombo = 0;
         anim.SetInteger(AttackComboHash, curCombo);
+    }
+
+    void AttackCollider()
+    {
+
+        StartCoroutine(AttackColliderCo());
+    }
+
+    IEnumerator AttackColliderCo()
+    {
+        weapon.OnAttackCollider();
+        yield return new WaitForSeconds(0.1f);
+        weapon.OffAttackCollider();
     }
 
     #endregion

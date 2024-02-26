@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 609254795162534860}
   - component: {fileID: 8399713168037714981}
   - component: {fileID: 4667953750213730115}
+  - component: {fileID: 8144736543758704943}
   - component: {fileID: 2654277907335310191}
   - component: {fileID: 2478289302057187976}
   - component: {fileID: 5802696986620453702}
@@ -178,6 +179,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &8144736543758704943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571560134710493818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e5bb23a38df2d14ab6e190c27665461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  isLie: 0
 --- !u!114 &2654277907335310191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,8 +205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2faf98d0cbc174f43a339ad46c0e3eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 50
+  maxHP: 500
   curHp: 0
+  playerAtk: 10
+  guardMultiplier: 0.5
   isParryAble: 0
   isGuardAble: 0
   parryTime_origin: 0.5
@@ -202,6 +219,8 @@ MonoBehaviour:
   moveZ: 0
   mainCameraTr: {fileID: 0}
   isLockon: 0
+  isInteraction: 1
+  anim: {fileID: 0}
 --- !u!114 &2478289302057187976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91fb1bc37ac528c4fbc5c5643d9a45a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curNanoGuage: 0
+  curNanoGauge: 0
+  maxNanoGuage: 10
   gold: 100
 --- !u!95 &5802696986620453702
 Animator:
@@ -226,7 +246,7 @@ Animator:
   m_GameObject: {fileID: 1571560134710493818}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 05977e2809647e1419d52dd0b69fc76e, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0caeea8bd4fa44f4f9fd97531baa98c7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 17a49da3be8ad104998312781764a86f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -256,8 +276,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.51, y: 1.38, z: 0.57}
-  m_Center: {x: 0, y: 0.74, z: 0}
+  m_Size: {x: 0.51, y: 0.4295507, z: 0.57}
+  m_Center: {x: 0, y: 0.26477543, z: 0}
 --- !u!1 &2682711903868127126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,6 +1499,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1483948438247126, guid: 862ea6754452d6649988db8d686def60, type: 3}
       insertIndex: -1
       addedObject: {fileID: 370664773587195846}
+    - targetCorrespondingSourceObject: {fileID: 1483948438247126, guid: 862ea6754452d6649988db8d686def60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1561451046962202219}
   m_SourcePrefab: {fileID: 100100000, guid: 862ea6754452d6649988db8d686def60, type: 3}
 --- !u!4 &5532607934625797344 stripped
 Transform:
@@ -1505,7 +1528,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1513,3 +1536,18 @@ CapsuleCollider:
   m_Height: 1.1
   m_Direction: 1
   m_Center: {x: -0.00000008207235, y: 0.46, z: 0.000000041273786}
+--- !u!114 &1561451046962202219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5533826725079170912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd09d6640b71ebf468601d0fc305b090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCollider: {fileID: 370664773587195846}
+  defaultDamage: 10
+  weaponDamageMultiplier: 2

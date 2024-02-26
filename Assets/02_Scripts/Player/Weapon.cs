@@ -16,4 +16,6 @@ public class Weapon : AttackAble
     {
         DefaultDamage = ATK * weaponDamageMultiplier;
     }
+
+
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackAble : MonoBehaviour
 {
-    [SerializeField] private Collider attackCollider;
+    public Collider attackCollider;
     [SerializeField] protected float defaultDamage = 10;
     public float DefaultDamage
     {
@@ -20,6 +20,14 @@ public class AttackAble : MonoBehaviour
 
     protected virtual void Awake()
     {
-        attackCollider = GetComponent<Collider>();  
+        attackCollider = GetComponent<Collider>();
+    }
+    public void OnAttackCollider()
+    {
+        attackCollider.enabled = true;
+    }
+    public void OffAttackCollider()
+    {
+        attackCollider.enabled = false;
     }
 }

@@ -64,6 +64,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.37016574
+        functionName: AttackCollider
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2faf98d0cbc174f43a339ad46c0e3eaa, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

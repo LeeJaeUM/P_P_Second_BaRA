@@ -35,16 +35,36 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Lie"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c241b60-765d-4ae2-a693-8af85e7d7511"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""4119def3-1434-4dfc-92d6-c75c4a9c3de4"",
-                    ""path"": ""<Keyboard>/z"",
+                    ""id"": ""4c8db1d5-3dbd-4806-b7d1-00903a9d0191"",
+                    ""path"": ""<Keyboard>/5"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""Lie"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1a4d0cc-60a8-43ec-b053-8d1ed41f95fc"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
                     ""action"": ""EmoteAble"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -52,11 +72,29 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""KM"",
+            ""bindingGroup"": ""KM"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Emote
         m_Emote = asset.FindActionMap("Emote", throwIfNotFound: true);
         m_Emote_EmoteAble = m_Emote.FindAction("EmoteAble", throwIfNotFound: true);
+        m_Emote_Lie = m_Emote.FindAction("Lie", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -119,11 +157,13 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Emote;
     private List<IEmoteActions> m_EmoteActionsCallbackInterfaces = new List<IEmoteActions>();
     private readonly InputAction m_Emote_EmoteAble;
+    private readonly InputAction m_Emote_Lie;
     public struct EmoteActions
     {
         private @EmoteInputActions m_Wrapper;
         public EmoteActions(@EmoteInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @EmoteAble => m_Wrapper.m_Emote_EmoteAble;
+        public InputAction @Lie => m_Wrapper.m_Emote_Lie;
         public InputActionMap Get() { return m_Wrapper.m_Emote; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -136,6 +176,9 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
             @EmoteAble.started += instance.OnEmoteAble;
             @EmoteAble.performed += instance.OnEmoteAble;
             @EmoteAble.canceled += instance.OnEmoteAble;
+            @Lie.started += instance.OnLie;
+            @Lie.performed += instance.OnLie;
+            @Lie.canceled += instance.OnLie;
         }
 
         private void UnregisterCallbacks(IEmoteActions instance)
@@ -143,6 +186,9 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
             @EmoteAble.started -= instance.OnEmoteAble;
             @EmoteAble.performed -= instance.OnEmoteAble;
             @EmoteAble.canceled -= instance.OnEmoteAble;
+            @Lie.started -= instance.OnLie;
+            @Lie.performed -= instance.OnLie;
+            @Lie.canceled -= instance.OnLie;
         }
 
         public void RemoveCallbacks(IEmoteActions instance)
@@ -160,8 +206,18 @@ public partial class @EmoteInputActions: IInputActionCollection2, IDisposable
         }
     }
     public EmoteActions @Emote => new EmoteActions(this);
+    private int m_KMSchemeIndex = -1;
+    public InputControlScheme KMScheme
+    {
+        get
+        {
+            if (m_KMSchemeIndex == -1) m_KMSchemeIndex = asset.FindControlSchemeIndex("KM");
+            return asset.controlSchemes[m_KMSchemeIndex];
+        }
+    }
     public interface IEmoteActions
     {
         void OnEmoteAble(InputAction.CallbackContext context);
+        void OnLie(InputAction.CallbackContext context);
     }
 }

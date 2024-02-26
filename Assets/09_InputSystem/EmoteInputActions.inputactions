@@ -13,16 +13,36 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Lie",
+                    "type": "Button",
+                    "id": "7c241b60-765d-4ae2-a693-8af85e7d7511",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "4119def3-1434-4dfc-92d6-c75c4a9c3de4",
-                    "path": "<Keyboard>/z",
+                    "id": "4c8db1d5-3dbd-4806-b7d1-00903a9d0191",
+                    "path": "<Keyboard>/5",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KM",
+                    "action": "Lie",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e1a4d0cc-60a8-43ec-b053-8d1ed41f95fc",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KM",
                     "action": "EmoteAble",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -30,5 +50,22 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "KM",
+            "bindingGroup": "KM",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
