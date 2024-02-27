@@ -62,6 +62,7 @@ public class Player : MonoBehaviour
     private int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
 
     private int curCombo = 0;
+    [SerializeField]
     private bool isAttack = false;
     
     public bool isLockon = false;
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
     public Action onParry;  //패리 성공시 발동액션 - PlayerState에서 사용
 
     [Header("행동 가능한 지 판단")]
-    [SerializeField] private bool isInteraction = true;
+    public bool isInteraction = true;
 
     Weapon weapon;
     PlayerInputActions inputActions;
