@@ -6,14 +6,14 @@ using UnityEngine;
 public class PlayerHit : MonoBehaviour
 {
     [SerializeField]
-    private float hitAbleTime = 0.2f;
+    private float hitAbleTime = 0.25f;
 
     [SerializeField] HitCollider[] hitCols;
     //[SerializeField] CapsuleCollider[] hitColliders;
 
     GameManager gameManager;
 
-    public Action<float> OnPlayerHit;    //Player에서 패리에 사용
+    public Action<float, Transform> OnPlayerHit;    //Player에서 패리에 사용
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class PlayerHit : MonoBehaviour
         }
     }
 
-    void OnHit(string name, float damageMul, float damage)
+    void OnHit(string name, float damageMul, float damage, Transform particleTr)
     {
         //중복피해를 방지하기 위한 게임매니저 불 변수 true로 변경
         gameManager.isPlayerHit = true;
@@ -40,7 +40,7 @@ public class PlayerHit : MonoBehaviour
         float finalDamage = damage * damageMul; 
 
         Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
-        OnPlayerHit?.Invoke(finalDamage);
+        OnPlayerHit?.Invoke(finalDamage, particleTr);
     }
 
     //피격 활성화 코루틴

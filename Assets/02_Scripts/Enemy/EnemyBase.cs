@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyBase : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected float maxHp = 100;
     [SerializeField] public float ATK = 10;
     [SerializeField] protected int gold = 10;
-    public ParticleSystem particle_Hit;
+    public GameObject hitParicle;
+
     PlayerState playerState;
     Player player;
 
@@ -34,7 +36,6 @@ public class EnemyBase : MonoBehaviour
     {
         HP = maxHp;
         hitCollider = GetComponent<Collider>();
-        particle_Hit = GetComponentInChildren<ParticleSystem>();
     }
 
     private void OnEnable()
@@ -62,11 +63,7 @@ public class EnemyBase : MonoBehaviour
         {
             EnemyDie();
         }
-
-        if(particle_Hit != null)
-        {
-            particle_Hit.Play();
-        }
+        ParticleRandomRotate(hitParicle);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -90,5 +87,20 @@ public class EnemyBase : MonoBehaviour
     void AddPlayerGold()
     {
         playerState.AddGold(gold);
+    }
+
+    void ParticleRandomRotate(GameObject particleObj)
+    {
+        if (particleObj != null)
+        {
+            Debug.Log("Test_Enemy_Particle!!!");
+            // 랜덤한 회전 값을 생성합니다.
+            Vector3 randomRotation = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+
+            // 생성된 랜덤 회전 값을 적용합니다.
+            particleObj.transform.rotation = Quaternion.Euler(randomRotation);
+            ParticleSystem ps = particleObj.GetComponent<ParticleSystem>();
+            ps.Play();
+        }
     }
 }

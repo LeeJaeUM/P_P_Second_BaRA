@@ -5,6 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
     private int curCombo = 0;
     [SerializeField]
     private bool isAttack = false;
+    private float attackableTime = 0.1f;
     
     public bool isLockon = false;
 
@@ -71,6 +73,8 @@ public class Player : MonoBehaviour
 
     [Header("행동 가능한 지 판단")]
     public bool isInteraction = true;
+
+    public GameObject hitParticle;
 
     Weapon weapon;
     PlayerInputActions inputActions;
@@ -164,7 +168,7 @@ public class Player : MonoBehaviour
     /// </summary>
     /// <param name="other"></param>
 
-    public void PlayerHited(float damage)
+    public void PlayerHited(float damage, Transform particle_Hit_Tr)
     {
         if (isParryAble)
         {
@@ -184,8 +188,24 @@ public class Player : MonoBehaviour
             ParryTimerReset();
             Debug.Log("그냥 맞아버림");
         }
+        ParticleRandomRotate(hitParticle, particle_Hit_Tr);
+        
     }
+    void ParticleRandomRotate(GameObject particleObj, Transform _particle_Hit_Tr)
+    {
+        if (particleObj != null)
+        {
+            Debug.Log("TestParticle!!!");
+            particleObj.transform.position = _particle_Hit_Tr.position;
+            // 랜덤한 회전 값을 생성합니다.
+            Vector3 randomRotation = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
 
+            // 생성된 랜덤 회전 값을 적용합니다.
+            particleObj.transform.rotation = Quaternion.Euler(randomRotation);
+            ParticleSystem ps = particleObj.GetComponent<ParticleSystem>();
+            ps.Play();
+        }
+    }
     #region 이동관련 함수
     void Move()
     {
@@ -312,7 +332,7 @@ public class Player : MonoBehaviour
     IEnumerator PlayerWeaponCollider_Co()
     {
         weapon.OnAttackCollider();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(attackableTime);
         weapon.OffAttackCollider();
     }
 

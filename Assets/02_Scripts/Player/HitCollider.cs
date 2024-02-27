@@ -20,7 +20,9 @@ public class HitCollider : MonoBehaviour
     [SerializeField]
     private float hitDamage = 10;
 
-    public Action<string, float, float> OnHit; //playerHit에서 사용
+    public Action<string, float, float, Transform> OnHit; //playerHit에서 사용
+
+    private Transform particleTr;
     private void Start()
     {
         //이 스크립트를 가진 오브제의 콜라이더 가져오기
@@ -34,6 +36,7 @@ public class HitCollider : MonoBehaviour
         {
             damageMultiplier = 1.5f;
         }
+        particleTr = GetComponent<Transform>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,7 +46,7 @@ public class HitCollider : MonoBehaviour
         {
             hitDamage = enemyBase.ATK;
             if (!GameManager.Instance.isPlayerHit)
-                OnHit?.Invoke(gameObject.name, damageMultiplier, hitDamage);
+                OnHit?.Invoke(gameObject.name, damageMultiplier, hitDamage, particleTr);
         }
 
     }
