@@ -257,11 +257,9 @@ public class Player : MonoBehaviour
         isInteraction = false;
         if (isAttack)   //이미 공격중이라면 = 콤보공격 시전
         {
-            Debug.Log("TTTTTETE 1");
             if (anim.GetCurrentAnimatorStateInfo(1).normalizedTime > 0.5f
                 && anim.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f)
             {
-                Debug.Log("TTTTTETE 2");
                 isAttack = true;
                 curCombo++;
                 anim.SetInteger(AttackComboHash, curCombo);
@@ -269,13 +267,11 @@ public class Player : MonoBehaviour
         }
         else            //처음 공격 하는 거라면
         {
-            Debug.Log("TTTTTETE 3");
             isAttack = true;
             curCombo++;
             anim.SetInteger(AttackComboHash, curCombo);
             anim.SetBool(IsAttackHash, isAttack);
         }
-        Debug.Log("TTTTTETE 4");
     }
 
 

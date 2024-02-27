@@ -10,6 +10,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected float maxHp = 100;
     [SerializeField] public float ATK = 10;
     [SerializeField] protected int gold = 10;
+    public ParticleSystem particle_Hit;
     PlayerState playerState;
     Player player;
 
@@ -33,6 +34,7 @@ public class EnemyBase : MonoBehaviour
     {
         HP = maxHp;
         hitCollider = GetComponent<Collider>();
+        particle_Hit = GetComponentInChildren<ParticleSystem>();
     }
 
     private void OnEnable()
@@ -56,10 +58,14 @@ public class EnemyBase : MonoBehaviour
     void EnemyHit(float damage)
     {
         HP -= damage;
-
         if (HP < 0.2f)
         {
             EnemyDie();
+        }
+
+        if(particle_Hit != null)
+        {
+            particle_Hit.Play();
         }
     }
 
