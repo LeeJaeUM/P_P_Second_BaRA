@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
     public float parryTime_origin = 2.0f;
     public float parryTime_cur = 0.0f;
 
+
     Vector3 moveDirection = Vector3.zero;
     public float moveSpeed = 5;
     public float rotationSpeed = 2;
@@ -195,7 +196,8 @@ public class Player : MonoBehaviour
 
         Vector3 movement = (cameraForward * moveZ +  cameraRight * moveX).normalized;
         moveDirection = movement;
-        if (!isAttack)
+        //if (!isAttack) //공격중에만 안되게 했던것
+        if (isInteraction)
         {
             rigid.velocity = movement * moveSpeed;
         }
@@ -251,6 +253,7 @@ public class Player : MonoBehaviour
             
     void AttackStart()
     {
+        isInteraction = false;
         if (isAttack)   //이미 공격중이라면 = 콤보공격 시전
         {
             Debug.Log("TTTTTETE 1");
@@ -278,8 +281,9 @@ public class Player : MonoBehaviour
     /// <summary>
     /// 애니메이션 종료 시점에실행할 애니메이션 이벤트 함수
     /// </summary>
-    void AttackEnd()
+   public void AttackEnd()
     {
+        isInteraction = true;
         isAttack = false;
         curCombo = 0;
         anim.SetInteger(AttackComboHash, curCombo);

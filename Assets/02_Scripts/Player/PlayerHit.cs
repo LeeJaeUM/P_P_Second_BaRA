@@ -18,7 +18,6 @@ public class PlayerHit : MonoBehaviour
     private void Awake()
     {
         hitCols = GameManager.Instance.Player.GetComponentsInChildren<HitCollider>();
-       // hitColliders = new CapsuleCollider[hitCols.Length];
         gameManager = GameManager.Instance;
 
 
@@ -27,25 +26,19 @@ public class PlayerHit : MonoBehaviour
     {
         for (int i = 0; i < hitCols.Length; i++)    //피격 콜라이더 배열
         {
-            //hitColliders[i] = hitCols[i].hitCollider;
             hitCols[i].OnHit += OnHit;
         }
     }
-    //private void OnDisable()
-    //{
-    //    for (int i = hitCols.Length; i > 0; i--)    //피격 콜라이더 배열
-    //    {
-    //        hitCols[i].OnHit -= OnHit;
-    //    }
-    //}
 
     void OnHit(string name, float damageMul, float damage)
     {
         //중복피해를 방지하기 위한 게임매니저 불 변수 true로 변경
         gameManager.isPlayerHit = true;
         StartCoroutine(ResetHitAbleTimeCo());
+
         //데미지계산식 (단순)
         float finalDamage = damage * damageMul; 
+
         Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
         OnPlayerHit?.Invoke(finalDamage);
     }
