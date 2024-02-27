@@ -42,7 +42,7 @@ public class HitCollider : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         EnemyBase enemyBase = other.gameObject.GetComponentInParent<EnemyBase>();
-        if(enemyBase != null)
+        if(enemyBase != null && enemyBase.isAttacking)
         {
             hitDamage = enemyBase.ATK;
             if (!GameManager.Instance.isPlayerHit)

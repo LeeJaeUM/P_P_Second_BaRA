@@ -30,17 +30,21 @@ public class Sandbag : EnemyBase
     void SandbagAttack_Right_A()
     {
         sphereColliders[0].enabled = true;
+        isAttacking = true;
     }
     void SandbagAttack_Left_A()
     {
         sphereColliders[1].enabled = true;
+        isAttacking = true;
     }
     void SandbagAttack_Right_D()
     {
         sphereColliders[0].enabled = false;
+        isAttacking = false;
     }
     void SandbagAttack_Left_D()
     {
         sphereColliders[1].enabled = false;
+        isAttacking = false;
     }
 }
