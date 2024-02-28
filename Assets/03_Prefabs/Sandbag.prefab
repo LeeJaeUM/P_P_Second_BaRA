@@ -291,7 +291,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5328805722371432870
 GameObject:
@@ -396,7 +396,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7084029594148116646
 GameObject:
@@ -546,6 +546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curHp: 0
   maxHp: 1000
-  ATK: 10
   gold: 10
+  ATK: 10
+  isAttacking: 0
+  hitParicle: {fileID: 0}
   sphereColliders: []

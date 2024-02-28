@@ -75,6 +75,8 @@ public class Player : MonoBehaviour
     public bool isInteraction = true;
 
     public GameObject hitParticle;
+    public GameObject guardParticle;
+    public GameObject parryParticle;
 
     Weapon weapon;
     PlayerInputActions inputActions;
@@ -175,20 +177,22 @@ public class Player : MonoBehaviour
             onParry?.Invoke();
             ParryTimerReset();
             Debug.Log("패리성공");
+            ParticleRandomRotate(parryParticle, particle_Hit_Tr);
         }
         else if (isGuardAble)
         {
             OnDamage(damage * guardMultiplier);
             GuardComplete();
             Debug.Log("가드로 막음");
+            ParticleRandomRotate(guardParticle, particle_Hit_Tr);
         }
         else
         {
             OnDamage(damage);
             ParryTimerReset();
             Debug.Log("그냥 맞아버림");
+            ParticleRandomRotate(hitParticle, particle_Hit_Tr);
         }
-        ParticleRandomRotate(hitParticle, particle_Hit_Tr);
         
     }
     void ParticleRandomRotate(GameObject particleObj, Transform _particle_Hit_Tr)
