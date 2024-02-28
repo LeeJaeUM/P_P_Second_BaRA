@@ -71,6 +71,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""23864a07-d197-474c-9358-9030216f7e51"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -170,6 +179,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Lockon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d27ddda-10c1-442c-9784-91da57ab1041"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -272,6 +292,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_StrongAttack = m_Player.FindAction("Strong Attack", throwIfNotFound: true);
         m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
         m_Player_Lockon = m_Player.FindAction("Lockon", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -342,6 +363,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_StrongAttack;
     private readonly InputAction m_Player_Guard;
     private readonly InputAction m_Player_Lockon;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -351,6 +373,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @StrongAttack => m_Wrapper.m_Player_StrongAttack;
         public InputAction @Guard => m_Wrapper.m_Player_Guard;
         public InputAction @Lockon => m_Wrapper.m_Player_Lockon;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -375,6 +398,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Lockon.started += instance.OnLockon;
             @Lockon.performed += instance.OnLockon;
             @Lockon.canceled += instance.OnLockon;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -394,6 +420,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Lockon.started -= instance.OnLockon;
             @Lockon.performed -= instance.OnLockon;
             @Lockon.canceled -= instance.OnLockon;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -481,6 +510,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnStrongAttack(InputAction.CallbackContext context);
         void OnGuard(InputAction.CallbackContext context);
         void OnLockon(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

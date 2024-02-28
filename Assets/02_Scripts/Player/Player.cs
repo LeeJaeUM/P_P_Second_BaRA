@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
 
     Vector3 moveDirection = Vector3.zero;
     public float moveSpeed = 5;
+    float originSpeed = 5;
     public float rotationSpeed = 2;
 
     public float moveX = 0;     //이동 적용되는지 확인용 변수 SetInput에서 사용중
@@ -61,6 +62,7 @@ public class Player : MonoBehaviour
     private int IsAttackHash = Animator.StringToHash("isAttack");
     private int AttackComboHash = Animator.StringToHash("AttackCombo");
     private int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
+    private int IsDashHash = Animator.StringToHash("isDash");
 
     private int curCombo = 0;
     [SerializeField]
@@ -77,6 +79,10 @@ public class Player : MonoBehaviour
     public GameObject hitParticle;
     public GameObject guardParticle;
     public GameObject parryParticle;
+
+    public float dashSpeed = 10.0f;
+    public bool isDash = false;
+
 
     Weapon weapon;
     PlayerInputActions inputActions;
@@ -113,10 +119,13 @@ public class Player : MonoBehaviour
         inputActions.Player.Guard.started += OnGuardInput;
         inputActions.Player.Guard.canceled += OnGuardInput;
         inputActions.Player.Lockon.performed += OnLockonInput;
+        inputActions.Player.Dash.performed += onDashInput;
     }
+
 
     private void OnDisable()
     {
+        inputActions.Player.Dash.performed -= onDashInput;
         inputActions.Player.Guard.canceled -= OnGuardInput;
         inputActions.Player.Guard.started -= OnGuardInput;
         inputActions.Player.StrongAttack.performed -= OnStrongAttackInput;
@@ -169,6 +178,24 @@ public class Player : MonoBehaviour
     /// 피격 시 관리
     /// </summary>
     /// <param name="other"></param>
+
+    private void onDashInput(InputAction.CallbackContext context)
+    {
+        StartCoroutine(DashCo());
+    }
+    IEnumerator DashCo()
+    {
+        float speedRange = 1;
+        moveSpeed = dashSpeed;
+        anim.SetFloat(InputXHash, speedRange);
+        yield return new WaitForSeconds(0.5f);
+        //while (true)
+        //{
+
+        //    yield return null;
+        //}
+        moveSpeed = originSpeed;
+    }
 
     public void PlayerHited(float damage, Transform particle_Hit_Tr)
     {
