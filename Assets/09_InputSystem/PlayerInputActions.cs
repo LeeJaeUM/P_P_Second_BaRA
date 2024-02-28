@@ -174,6 +174,76 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""cf0555cb-93df-409a-978d-aebdb12bc018"",
+            ""actions"": [
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""c606cf38-e46c-4bc0-906d-33cd484a9423"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AnyKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""83945bb0-8105-431a-b075-401493a8d7a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""293b1167-84fc-4c60-8505-cc651689c6d9"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6711f29-3a48-4a06-9fef-98d3631c4905"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02dd0059-4c5b-42d2-9741-ff7c382bb4b2"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3227bcea-fc5b-4284-8d75-47cda532f427"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KM"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -202,6 +272,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_StrongAttack = m_Player.FindAction("Strong Attack", throwIfNotFound: true);
         m_Player_Guard = m_Player.FindAction("Guard", throwIfNotFound: true);
         m_Player_Lockon = m_Player.FindAction("Lockon", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
+        m_UI_AnyKey = m_UI.FindAction("AnyKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -337,6 +411,60 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_Click;
+    private readonly InputAction m_UI_AnyKey;
+    public struct UIActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public UIActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Click => m_Wrapper.m_UI_Click;
+        public InputAction @AnyKey => m_Wrapper.m_UI_AnyKey;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
+            @AnyKey.started += instance.OnAnyKey;
+            @AnyKey.performed += instance.OnAnyKey;
+            @AnyKey.canceled += instance.OnAnyKey;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
+            @AnyKey.started -= instance.OnAnyKey;
+            @AnyKey.performed -= instance.OnAnyKey;
+            @AnyKey.canceled -= instance.OnAnyKey;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KMSchemeIndex = -1;
     public InputControlScheme KMScheme
     {
@@ -353,5 +481,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnStrongAttack(InputAction.CallbackContext context);
         void OnGuard(InputAction.CallbackContext context);
         void OnLockon(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnClick(InputAction.CallbackContext context);
+        void OnAnyKey(InputAction.CallbackContext context);
     }
 }
