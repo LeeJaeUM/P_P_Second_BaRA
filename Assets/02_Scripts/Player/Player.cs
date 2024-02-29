@@ -67,8 +67,8 @@ public class Player : MonoBehaviour
     private int curCombo = 0;
     [SerializeField]
     private bool isAttack = false;
-    private float attackableTime = 0.1f;
-    
+    WaitForSeconds attackableTime = new WaitForSeconds(0.8f);
+
     public bool isLockon = false;
 
     public Action onParry;  //패리 성공시 발동액션 - PlayerState에서 사용
@@ -81,8 +81,8 @@ public class Player : MonoBehaviour
     public GameObject parryParticle;
 
     public float dashSpeed = 10.0f;
-    public bool isDash = false;
-
+    public bool isDashable = true;
+    WaitForSeconds dashCool = new WaitForSeconds(1f);
 
     Weapon weapon;
     PlayerInputActions inputActions;
@@ -181,16 +181,20 @@ public class Player : MonoBehaviour
 
     private void onDashInput(InputAction.CallbackContext context)
     {
-        StartCoroutine(DashCo());
+        if(isDashable)
+            StartCoroutine(DashCo());
     }
     IEnumerator DashCo()
     {
         isAttack = false;
+        isDashable = false;
         AttackEnd();
         moveSpeed = dashSpeed;
         anim.SetTrigger(DashHash);
         yield return new WaitForSeconds(0.5f);
         moveSpeed = originSpeed;
+        yield return dashCool;
+        isDashable = true;
     }
 
     public void PlayerHited(float damage, Transform particle_Hit_Tr)
@@ -359,7 +363,7 @@ public class Player : MonoBehaviour
     IEnumerator PlayerWeaponCollider_Co()
     {
         weapon.OnAttackCollider();
-        yield return new WaitForSeconds(attackableTime);
+        yield return attackableTime;
         weapon.OffAttackCollider();
     }
 
