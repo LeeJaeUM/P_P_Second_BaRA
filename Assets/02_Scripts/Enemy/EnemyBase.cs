@@ -79,7 +79,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    void EnemyDie()
+    protected virtual void EnemyDie()
     {
         hitCollider.enabled = false;
         onEnemyDie?.Invoke();
