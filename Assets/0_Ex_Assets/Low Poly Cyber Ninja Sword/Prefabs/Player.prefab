@@ -248,6 +248,7 @@ MonoBehaviour:
   parryTime_origin: 0.5
   parryTime_cur: 0
   moveSpeed: 5
+  originSpeed: 5
   rotationSpeed: 2
   moveX: 0
   moveZ: 0
@@ -258,6 +259,8 @@ MonoBehaviour:
   hitParticle: {fileID: 7493656698973494720}
   guardParticle: {fileID: 6678738509702870399}
   parryParticle: {fileID: 5648640838030174939}
+  dashSpeed: 10
+  isDash: 0
 --- !u!114 &2478289302057187976
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
     Vector3 moveDirection = Vector3.zero;
     public float moveSpeed = 5;
-    float originSpeed = 5;
+    [SerializeField]float originSpeed = 5;
     public float rotationSpeed = 2;
 
     public float moveX = 0;     //이동 적용되는지 확인용 변수 SetInput에서 사용중
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
     private int IsAttackHash = Animator.StringToHash("isAttack");
     private int AttackComboHash = Animator.StringToHash("AttackCombo");
     private int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
-    private int IsDashHash = Animator.StringToHash("isDash");
+    private int DashHash = Animator.StringToHash("Dash");
 
     private int curCombo = 0;
     [SerializeField]
@@ -185,15 +185,11 @@ public class Player : MonoBehaviour
     }
     IEnumerator DashCo()
     {
-        float speedRange = 1;
+        isAttack = false;
+        AttackEnd();
         moveSpeed = dashSpeed;
-        anim.SetFloat(InputXHash, speedRange);
+        anim.SetTrigger(DashHash);
         yield return new WaitForSeconds(0.5f);
-        //while (true)
-        //{
-
-        //    yield return null;
-        //}
         moveSpeed = originSpeed;
     }
 
