@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : EnemyBase
 {
+    Animator anim;
     enum State
     {
         Idle,
@@ -19,12 +20,18 @@ public class Enemy : EnemyBase
     private float distance_IdleToMove = 10f; // Idle에서 Move로 전환하는 거리 임계값
     private float distance_MoveToBattle = 4f; // Move에서 Battle로 전환하는 거리 임계값
 
+    readonly int IsMoveHash = Animator.StringToHash("isMove");
+    readonly int IsBattleInHash = Animator.StringToHash("isBattleIn");
+    readonly int AttackPatternHash = Animator.StringToHash("AttackPattern");
+    readonly int IsDieHash = Animator.StringToHash("isDie");
+
 
 
     protected override void Awake()
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();    
     }
     private void Start()
     {
@@ -36,6 +43,10 @@ public class Enemy : EnemyBase
 
     private void Update()
     {
+        if (target == null)  //플레이어가 사라지면 Idle로 변경
+        {
+            EnterIdle();
+        }
         switch (state)
         {
             case State.Idle:    Idle();
@@ -73,9 +84,19 @@ public class Enemy : EnemyBase
 
     void Battle()
     {
-        if(target == null)  //플레이어가 사라지면 Idle로 변경
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        // 플레이어를 감지하기 위해 Ray를 사용
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
         {
-            EnterIdle();
+            if (hit.collider.CompareTag("Player"))
+            {
+                EnterBattle();
+            }
+        }
+        else
+        {
+            EnterMove();
         }
     }
 
@@ -83,18 +104,26 @@ public class Enemy : EnemyBase
     private void EnterIdle()
     {
         state = State.Idle;
+
+        anim.SetBool(IsMoveHash, false);
+        anim.SetBool(IsBattleInHash, false);
+        anim.SetInteger(AttackPatternHash, 0);  //콤보 0으로 초기화
         Debug.Log("Entering Idle state.");
     }
 
     private void EnterMove()
     {
         state = State.Move;
+
+        anim.SetBool(IsMoveHash, true);
         Debug.Log("Entering Move state.");
     }
 
     private void EnterBattle()
     {
         state = State.Battle;
+
+        anim.SetBool(IsMoveHash, false);
         Debug.Log("Entering Battle state.");
     }
     #endregion
