@@ -13,22 +13,29 @@ using System.Collections.Generic;
 
 public class MeleeWeaponTrail : MonoBehaviour
 {
+	[Header("활성화 관련")]
+	[Tooltip("true면 트레일 활성화 false면 비활성화")]
 	[SerializeField]
 	bool _emit = true;
-	public bool Emit { set{_emit = value;} }
+
+	public bool Emit { set { _emit = value; } }
 
 	bool _use = true;
-	public bool Use { set{_use = value;} }
+	public bool Use { set { _use = value; } }
 
+	[Tooltip("default가 0일땐 무한유지 시간을 올리면 자동으로 줄어들고 0이 되면 Emit 을 false로")]
 	[SerializeField]
-	float _emitTime = 0.0f;
+	public float _emitTime = 0.0f;
 
+	[Tooltip("트레일용 네모난 마테리얼")]
 	[SerializeField]
 	Material _material;
 
+	[Header("잔상 유지시간")]
 	[SerializeField]
 	float _lifeTime = 1.0f;
 
+	[Header("차례로 변하는 색 0,1,2 내림차순")]
 	[SerializeField]
 	Color[] _colors;
 
@@ -43,6 +50,8 @@ public class MeleeWeaponTrail : MonoBehaviour
 	float _minVertexDistanceSqr = 0.0f;
 	float _maxVertexDistanceSqr = 0.0f;
 
+
+	[Header("클 수록 각짐")]
 	[SerializeField]
 	float _maxAngle = 3.00f;
 
@@ -54,8 +63,10 @@ public class MeleeWeaponTrail : MonoBehaviour
 	int subdivisions = 4;
 #endif
 
+	[Tooltip("손잡이")]
 	[SerializeField]
 	Transform _base;
+	[Tooltip("칼 끝")]
 	[SerializeField]
 	Transform _tip;
 
@@ -76,6 +87,26 @@ public class MeleeWeaponTrail : MonoBehaviour
 	}
 
 	void Start()
+	{
+		_lastPosition = transform.position;
+		_trailObject = new GameObject("Trail");
+		_trailObject.transform.parent = null;
+		_trailObject.transform.position = Vector3.zero;
+		_trailObject.transform.rotation = Quaternion.identity;
+		_trailObject.transform.localScale = Vector3.one;
+		_trailObject.AddComponent(typeof(MeshFilter));
+		_trailObject.AddComponent(typeof(MeshRenderer));
+		_trailObject.GetComponent<Renderer>().material = _material;
+
+		_trailMesh = new Mesh();
+		_trailMesh.name = name + "TrailMesh";
+		_trailObject.GetComponent<MeshFilter>().mesh = _trailMesh;
+
+		_minVertexDistanceSqr = _minVertexDistance * _minVertexDistance;
+		_maxVertexDistanceSqr = _maxVertexDistance * _maxVertexDistance;
+	}
+
+	public void MeleeTrail_StartFunc()
 	{
 		_lastPosition = transform.position;
 		_trailObject = new GameObject("Trail");
@@ -161,7 +192,7 @@ public class MeleeWeaponTrail : MonoBehaviour
 					else if (_points.Count > 1)
 					{
 						// add 1+subdivisions for every possible pair in the _points
-						for (int n = 0; n < 1+subdivisions; ++n)
+						for (int n = 0; n < 1 + subdivisions; ++n)
 							_smoothedPoints.Add(p);
 					}
 
@@ -197,7 +228,7 @@ public class MeleeWeaponTrail : MonoBehaviour
 						for (int n = 0; n < smoothTipList.Count; ++n)
 						{
 
-							int idx = _smoothedPoints.Count - (smoothTipList.Count-n);
+							int idx = _smoothedPoints.Count - (smoothTipList.Count - n);
 							// there are moments when the _smoothedPoints are lesser
 							// than what is required, when elements from it are removed
 							if (idx > -1 && idx < _smoothedPoints.Count)
@@ -205,7 +236,7 @@ public class MeleeWeaponTrail : MonoBehaviour
 								Point sp = new Point();
 								sp.basePosition = smoothBaseList[n];
 								sp.tipPosition = smoothTipList[n];
-								sp.timeCreated = Mathf.Lerp(firstTime, secondTime, (float)n/smoothTipList.Count);
+								sp.timeCreated = Mathf.Lerp(firstTime, secondTime, (float)n / smoothTipList.Count);
 								_smoothedPoints[idx] = sp;
 							}
 							//else
@@ -313,7 +344,7 @@ public class MeleeWeaponTrail : MonoBehaviour
 
 				newColors[n * 2] = newColors[(n * 2) + 1] = color;
 
-				float uvRatio = (float)n/pointsToUse.Count;
+				float uvRatio = (float)n / pointsToUse.Count;
 				newUV[n * 2] = new Vector2(uvRatio, 0);
 				newUV[(n * 2) + 1] = new Vector2(uvRatio, 1);
 
