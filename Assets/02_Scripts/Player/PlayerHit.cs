@@ -30,7 +30,7 @@ public class PlayerHit : MonoBehaviour
         {
             hitCols[i].OnHit += OnHit;
         }
-        pushPlayerVec = -transform.forward;
+        //pushPlayerVec = -transform.forward;
     }
 
     void OnHit(int attackType, float damageMul, float damage, Transform particleTr)
@@ -46,7 +46,7 @@ public class PlayerHit : MonoBehaviour
         Debug.Log($"피격 배율 {damageMul},  데미지는 {finalDamage}");
         OnPlayerHit?.Invoke(finalDamage, particleTr);
 
-        //pushPlayerVec =  transform.position - particleTr.position;
+        pushPlayerVec =  -particleTr.forward;
         StartCoroutine(PushPlayer(attackType));
     }
     //피격 활성화 코루틴
