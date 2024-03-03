@@ -13,6 +13,7 @@ public class PlayerHit : MonoBehaviour
 
     GameManager gameManager;
 
+    Vector3 pushPlayerVec = Vector3.zero;
     public Action<float, Transform> OnPlayerHit;    //Player에서 패리에 사용
     public  Rigidbody rigid;
 
@@ -29,10 +30,10 @@ public class PlayerHit : MonoBehaviour
         {
             hitCols[i].OnHit += OnHit;
         }
+        pushPlayerVec = -transform.forward;
     }
-    Vector3 pushPlayerVec = Vector3.zero;
 
-    void OnHit(string name, float damageMul, float damage, Transform particleTr)
+    void OnHit(int attackType, float damageMul, float damage, Transform particleTr)
     {
         //중복피해를 방지하기 위한 게임매니저 불 변수 true로 변경
         gameManager.isPlayerHit = true;
@@ -41,11 +42,12 @@ public class PlayerHit : MonoBehaviour
         //데미지계산식 (단순)
         float finalDamage = damage * damageMul; 
 
-        Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
+        //Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
+        Debug.Log($"피격 배율 {damageMul},  데미지는 {finalDamage}");
         OnPlayerHit?.Invoke(finalDamage, particleTr);
 
-        pushPlayerVec =  transform.position - particleTr.position;
-        StartCoroutine(PushPlayer());
+        //pushPlayerVec =  transform.position - particleTr.position;
+        StartCoroutine(PushPlayer(attackType));
     }
     //피격 활성화 코루틴
     IEnumerator ResetHitAbleTimeCo()
@@ -54,10 +56,16 @@ public class PlayerHit : MonoBehaviour
         gameManager.isPlayerHit = false;
     }
 
-    IEnumerator PushPlayer()
+    IEnumerator PushPlayer(int attackType)
     {
         pushPlayerVec.y = 0;
-        rigid.AddForce(pushPlayerVec * 1.5f, ForceMode.Impulse);
+        switch (attackType)
+        {
+            case 1:  rigid.AddForce(pushPlayerVec * 2f, ForceMode.Impulse);
+                break;
+            case 2:  rigid.AddForce(pushPlayerVec * 8f, ForceMode.Impulse);
+                break;
+        }
         yield return null;
     }
 }

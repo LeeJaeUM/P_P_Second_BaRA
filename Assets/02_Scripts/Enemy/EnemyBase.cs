@@ -12,7 +12,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected int gold = 10;
     public float ATK = 10;
     public bool isAttacking = false;
-
+    public int attackType = 1;
     public GameObject hitParicle;
 
     PlayerState playerState;

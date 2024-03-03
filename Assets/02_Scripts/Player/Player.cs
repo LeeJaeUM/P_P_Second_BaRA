@@ -63,6 +63,9 @@ public class Player : MonoBehaviour
     private int AttackComboHash = Animator.StringToHash("AttackCombo");
     private int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
     private int DashHash = Animator.StringToHash("Dash");
+    private int isGuardHash = Animator.StringToHash("isGuard");
+    private int ParryHash = Animator.StringToHash("Parry");
+    private int HitHash = Animator.StringToHash("Hit");
 
     private int curCombo = 0;
     [SerializeField]
@@ -165,6 +168,7 @@ public class Player : MonoBehaviour
     {
         if (context.started)
         {
+            anim.SetBool(isGuardHash, true);
             //Debug.Log("가드 누름");
             isGuardAble = true;
             isParryAble = true;
@@ -172,6 +176,7 @@ public class Player : MonoBehaviour
         
         if(context.canceled)
         {
+            anim.SetBool(isGuardHash, false);
             //Debug.Log("가드 뗌__");
             isGuardAble = false;
             isParryAble = false;
@@ -205,6 +210,7 @@ public class Player : MonoBehaviour
         if (isParryAble)
         {
             onParry?.Invoke();
+            anim.SetTrigger(ParryHash);
             ParryTimerReset();
             Debug.Log("패리성공");
             ParticleRandomRotate(parryParticle, particle_Hit_Tr);
@@ -219,13 +225,14 @@ public class Player : MonoBehaviour
         else
         {
             OnDamage(damage);
+            StartCoroutine(Hit_Co());
             ParryTimerReset();
             Debug.Log("그냥 맞아버림");
             ParticleRandomRotate(hitParticle, particle_Hit_Tr);
         }
         
     }
-    void ParticleRandomRotate(GameObject particleObj, Transform _particle_Hit_Tr)
+    void ParticleRandomRotate(GameObject particleObj, Transform _particle_Hit_Tr)   //피격 위치에서 랜덤 방향으로 파티클 생성
     {
         if (particleObj != null)
         {
@@ -240,6 +247,14 @@ public class Player : MonoBehaviour
             ps.Play();
         }
     }
+    IEnumerator Hit_Co()        //피격 시 이동 제한을 위한 코루틴
+    {
+        anim.SetTrigger(HitHash);
+        isInteraction = false;
+        yield return new WaitForSeconds(1f);
+        isInteraction = true;
+    }
+
     #region 이동관련 함수
     void Move()
     {

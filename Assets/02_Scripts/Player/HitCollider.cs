@@ -20,7 +20,7 @@ public class HitCollider : MonoBehaviour
     [SerializeField]
     private float hitDamage = 10;
 
-    public Action<string, float, float, Transform> OnHit; //playerHit에서 사용
+    public Action<int, float, float, Transform> OnHit; //playerHit에서 사용
 
     private Transform particleTr;
     private void Start()
@@ -46,7 +46,7 @@ public class HitCollider : MonoBehaviour
         {
             hitDamage = enemyBase.ATK;
             if (!GameManager.Instance.isPlayerHit)
-                OnHit?.Invoke(gameObject.name, damageMultiplier, hitDamage, particleTr);
+                OnHit?.Invoke(enemyBase.attackType, damageMultiplier, hitDamage, particleTr);
         }
 
     }

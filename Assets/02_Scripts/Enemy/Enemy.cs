@@ -133,7 +133,7 @@ public class Enemy : EnemyBase
 
     void Battle()
     {
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);       
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
         //Battle중에서의 상태 변경
         if (!isInteract && distanceToTarget > distance_MoveToBattle + 0.5f)  //플레이어가 멀어지면 Move로 변경, 공격(행동) 중이 아닐 때
         {
@@ -142,6 +142,7 @@ public class Enemy : EnemyBase
 
         if (isRotateAble)     //공격 중이 아닐 때 플레이어 바라보기
             LookAtPlayer();
+        /*
         RaycastHit hit;
         if (Physics.BoxCast(transform.position, transform.lossyScale * 0.4f, transform.forward, out hit, transform.rotation, _maxDistance))
         {
@@ -150,6 +151,18 @@ public class Enemy : EnemyBase
                 if (!isInteract)    //중복 공격 방지
                     StartCoroutine(EnemyAttack());
             }
+        }*/
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position, transform.lossyScale * 0.4f, transform.forward, transform.rotation, _maxDistance);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                if (!isInteract)    //중복 공격 방지
+                    StartCoroutine(EnemyAttack());
+
+                // 다른 작업 수행 가능
+            }
         }
     }
     
@@ -157,10 +170,9 @@ public class Enemy : EnemyBase
     {
         isInteract = true;          //중복 공격 방지
         int pattern = Random.Range(1, 5);
-        testPattern = pattern;
-        //test
-        pattern = 4;
-        anim.SetInteger(AttackPatternHash, pattern);
+        anim.SetInteger(AttackPatternHash, testPattern);
+        //testPattern = pattern;
+        //anim.SetInteger(AttackPatternHash, pattern);
         yield return null;
     }
 
@@ -189,22 +201,33 @@ public class Enemy : EnemyBase
     //공격 범위 온 오프
     void Attack_Right()
     {
-        StartCoroutine(Attack_Co(rightHandCollider));
+        StartCoroutine(Attack_Co(rightHandCollider, 0.18f));
     }
     void Attack_Left()
     {
-        StartCoroutine(Attack_Co(leftHandCollider));
+        StartCoroutine(Attack_Co(leftHandCollider, 0.15f));
     }
     void Attack_Gound()
     {
-        StartCoroutine(Attack_Co(groundAttackCollider));
+        StartCoroutine(Attack_Power_Co(groundAttackCollider, 0.25f));
     }
 
-    IEnumerator Attack_Co(Collider atkCollider)
+    IEnumerator Attack_Co(Collider atkCollider, float attackTime) // 일반 공격
     {
+        attackType = 1;
         atkCollider.enabled = true;
         isAttacking = true;
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(attackTime);
+        atkCollider.enabled = false;
+        isAttacking = false;
+    }
+
+    IEnumerator Attack_Power_Co(Collider atkCollider, float attackTime) //더 크게 밀리는 강한 공격
+    {
+        attackType = 2;
+        atkCollider.enabled = true;
+        isAttacking = true;
+        yield return new WaitForSeconds(attackTime);
         atkCollider.enabled = false;
         isAttacking = false;
     }
