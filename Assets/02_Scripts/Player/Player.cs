@@ -249,7 +249,9 @@ public class Player : MonoBehaviour
     }
     IEnumerator Hit_Co()        //피격 시 이동 제한을 위한 코루틴
     {
+        curCombo = 0;           //공격 중인 거 초기화
         anim.SetTrigger(HitHash);
+        anim.SetInteger(AttackComboHash, curCombo);
         isInteraction = false;
         yield return new WaitForSeconds(1f);
         isInteraction = true;

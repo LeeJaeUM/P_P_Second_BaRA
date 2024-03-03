@@ -76853,7 +76853,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.2666667
-    functionName: Attack_Left
+    functionName: Attack_Left_Power
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -207,6 +207,12 @@ public class Enemy : EnemyBase
     {
         StartCoroutine(Attack_Co(leftHandCollider, 0.15f));
     }
+
+    void Attack_Left_Power()
+    {
+        StartCoroutine(Attack_Power_Co(leftHandCollider, 0.25f));
+    }
+
     void Attack_Gound()
     {
         StartCoroutine(Attack_Power_Co(groundAttackCollider, 0.25f));
