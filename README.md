@@ -3,6 +3,9 @@
  
 ### 프로젝트 소개 
 3인칭 3D 액션게임 구현
+![프로젝트2처음-Thumbnail (2)](https://github.com/LeeJaeUM/P_P_Second_BaRA/assets/106094800/14e1c177-d29e-4fbf-b327-c9c7586b6506)
+
+
 -----
 
 ### 설명 영상 링크 :  https://youtu.be/kFxZ9MI73E8
