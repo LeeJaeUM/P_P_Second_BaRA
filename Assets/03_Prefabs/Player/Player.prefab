@@ -1610,6 +1610,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1483948438247126, guid: 862ea6754452d6649988db8d686def60, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1561451046962202219}
+    - targetCorrespondingSourceObject: {fileID: 1483948438247126, guid: 862ea6754452d6649988db8d686def60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9034823519184801482}
   m_SourcePrefab: {fileID: 100100000, guid: 862ea6754452d6649988db8d686def60, type: 3}
 --- !u!4 &5532607934625797344 stripped
 Transform:
@@ -1659,6 +1662,31 @@ MonoBehaviour:
   attackCollider: {fileID: 370664773587195846}
   defaultDamage: 10
   weaponDamageMultiplier: 2
+--- !u!114 &9034823519184801482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5533826725079170912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ceb339997c8304e9354d4ce5ddc9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _emit: 1
+  _emitTime: 3
+  _material: {fileID: 2100000, guid: 5f402d1520e5fa74fa21e08f85b71370, type: 2}
+  _lifeTime: 1
+  _colors: []
+  _sizes: []
+  _minVertexDistance: 0.1
+  _maxVertexDistance: 10
+  _maxAngle: 3
+  _autoDestruct: 0
+  subdivisions: 1
+  _base: {fileID: 3053132714143578731}
+  _tip: {fileID: 4177711656308500075}
 --- !u!1001 &5649639751779155897
 PrefabInstance:
   m_ObjectHideFlags: 0

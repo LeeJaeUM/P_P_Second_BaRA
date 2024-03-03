@@ -84,6 +84,8 @@ public class Player : MonoBehaviour
     public bool isDashable = true;
     WaitForSeconds dashCool = new WaitForSeconds(1f);
 
+    MeleeWeaponTrail weaponTrail;
+
     Weapon weapon;
     PlayerInputActions inputActions;
     Rigidbody rigid;
@@ -96,7 +98,8 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         HP = maxHP;
         GameManager.Instance.PlayerHit.OnPlayerHit += PlayerHited;
-        weapon = GetComponentInChildren<Weapon>();  
+        weapon = GetComponentInChildren<Weapon>();
+        weaponTrail = GetComponentInChildren<MeleeWeaponTrail>();
     }
 
     private void Update()
@@ -363,6 +366,8 @@ public class Player : MonoBehaviour
     IEnumerator PlayerWeaponCollider_Co()
     {
         weapon.OnAttackCollider();
+        weaponTrail._emitTime = 0.14f;
+        weaponTrail.Emit = true;
         yield return attackableTime;
         weapon.OffAttackCollider();
     }
