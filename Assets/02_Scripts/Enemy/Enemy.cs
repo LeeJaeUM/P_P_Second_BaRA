@@ -33,6 +33,11 @@ public class Enemy : EnemyBase
 
     public int testPattern = 0;
 
+    [SerializeField]
+    public CapsuleCollider leftHandCollider;
+    public CapsuleCollider rightHandCollider;
+    public Collider groundAttackCollider;
+
     // ray의 길이
     [SerializeField]
     private float _maxDistance = 3.0f;      //Ray의 최대 길이
@@ -64,7 +69,8 @@ public class Enemy : EnemyBase
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();    
+        anim = GetComponent<Animator>();
+        //AttackCollisers = GetComponentsInChildren<CapsuleCollider>();
     }
     private void Start()
     {
@@ -72,6 +78,8 @@ public class Enemy : EnemyBase
         {
             Debug.Log("타겟이 없음!");
         }
+
+        agent.SetDestination(target.position);
     }
 
     private void Update()
@@ -160,7 +168,7 @@ public class Enemy : EnemyBase
         // 현재 회전에서 목표 회전까지 부드럽게 회전시키기
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
-
+    #region AttackAnimation Clip 애니메이션 이벤트 함수
     void AttackEnd()
     {
         isInteract = false;
@@ -171,6 +179,31 @@ public class Enemy : EnemyBase
     {
         isRotateAble = false;
     }
+
+    //공격 범위 온 오프
+    void Attack_Right()
+    {
+        StartCoroutine(Attack_Co(rightHandCollider));
+    }
+    void Attack_Left()
+    {
+        StartCoroutine(Attack_Co(leftHandCollider));
+    }
+    void Attack_Gound()
+    {
+        StartCoroutine(Attack_Co(groundAttackCollider));
+    }
+
+    IEnumerator Attack_Co(Collider atkCollider)
+    {
+        atkCollider.enabled = true;
+        isAttacking = true;
+        yield return new WaitForSeconds(0.15f);
+        atkCollider.enabled = false;
+        isAttacking = false;
+    }
+    #endregion
+
 
     protected override void EnemyDie()
     {
