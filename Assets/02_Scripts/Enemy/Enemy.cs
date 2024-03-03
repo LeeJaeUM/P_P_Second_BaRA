@@ -24,12 +24,14 @@ public class Enemy : EnemyBase
     readonly int IsMoveHash = Animator.StringToHash("isMove");
     readonly int IsBattleInHash = Animator.StringToHash("isBattleIn");
     readonly int AttackPatternHash = Animator.StringToHash("AttackPattern");
-    readonly int IsDieHash = Animator.StringToHash("isDie");
+    readonly int DieHash = Animator.StringToHash("Die");
+    [SerializeField]
+    private bool isInteract = false;    //공격 패턴 시 연속 공격 제한
 
-    private bool isInteract = false;
+    public int testPattern = 0;
     // ray의 길이
     [SerializeField]
-    private float _maxDistance = 3.0f;
+    private float _maxDistance = 3.0f;      //Ray의 최대 길이
 
     // ray의 색상
     [SerializeField]
@@ -115,28 +117,35 @@ public class Enemy : EnemyBase
 
     void Battle()
     {
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        LookAtPlayer();
-
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);       
         //Battle중에서의 상태 변경
-        if (distanceToTarget > distance_MoveToBattle)  //플레이어가 멀어지면 Move로 변경
+        if (distanceToTarget > distance_MoveToBattle && !isInteract)  //플레이어가 멀어지면 Move로 변경, 공격(행동) 중이 아닐 때
         {
             EnterMove();
         }
+
+        if (!isInteract)     //공격 중이 아닐 때 플레이어 바라보기
+            LookAtPlayer();
         RaycastHit hit;
         if (Physics.BoxCast(transform.position, transform.lossyScale / 2.0f, transform.forward, out hit, transform.rotation, _maxDistance))
         {
             if (hit.collider.CompareTag("Player"))
             {
-                //앞에 플레이어가 있으니 공격 ㄱㄱ
+                if (!isInteract)    //중복 공격 방지
+                    StartCoroutine(EnemyAttack());
             }
-        }
-        else
-        {
-            //EnterMove();
         }
     }
     
+    IEnumerator EnemyAttack()
+    {
+        isInteract = true;          //중복 공격 방지
+        int pattern = Random.Range(1, 5);
+        testPattern = pattern;
+        anim.SetInteger(AttackPatternHash, pattern);
+        yield return null;
+    }
+
     //Battle에서 사용하는 플레이어를 바라보는 함수
     void LookAtPlayer()
     {
@@ -144,6 +153,20 @@ public class Enemy : EnemyBase
         followPlayer.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(followPlayer);
         transform.rotation = targetRotation;
+    }
+
+    void AttackEnd()
+    {
+        isInteract = false;
+    }
+
+    protected override void EnemyDie()
+    {
+        base.EnemyDie();
+        isAttacking = false;
+        isInteract = true;
+        state = State.Die;
+        anim.SetTrigger(DieHash);
     }
 
     #region State 변경 함수
@@ -170,16 +193,9 @@ public class Enemy : EnemyBase
         state = State.Battle;
 
         anim.SetBool(IsMoveHash, false);
+        anim.SetBool(IsBattleInHash, true);
         Debug.Log("Entering Battle state.");
     }
     #endregion
 
-    protected override void EnemyDie()
-    {
-        base.EnemyDie();
-        isAttacking = false;
-        isInteract = true;
-        state = State.Die;
-        anim.SetBool(IsDieHash, true);
-    }
 }
