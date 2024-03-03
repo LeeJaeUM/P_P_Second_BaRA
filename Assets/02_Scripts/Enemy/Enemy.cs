@@ -10,7 +10,8 @@ public class Enemy : EnemyBase
     {
         Idle,
         Move,
-        Battle
+        Battle,
+        Die
     }
     State state = State.Idle;
 
@@ -25,8 +26,34 @@ public class Enemy : EnemyBase
     readonly int AttackPatternHash = Animator.StringToHash("AttackPattern");
     readonly int IsDieHash = Animator.StringToHash("isDie");
 
+    private bool isInteract = false;
+    // ray의 길이
+    [SerializeField]
+    private float _maxDistance = 3.0f;
 
+    // ray의 색상
+    [SerializeField]
+    private Color _rayColor = Color.red;
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = _rayColor;
+
+        // 함수 파라미터 : 현재 위치, Box의 절반 사이즈, Ray의 방향, RaycastHit 결과, Box의 회전값, BoxCast를 진행할 거리
+        if (true == Physics.BoxCast(transform.position, transform.lossyScale / 2.0f, transform.forward, out RaycastHit hit, transform.rotation, _maxDistance))
+        {
+            // Hit된 지점까지 ray를 그려준다.
+            Gizmos.DrawRay(transform.position, transform.forward * hit.distance);
+
+            // Hit된 지점에 박스를 그려준다.
+            Gizmos.DrawWireCube(transform.position + transform.forward * hit.distance, transform.lossyScale);
+        }
+        else
+        {
+            // Hit가 되지 않았으면 최대 검출 거리로 ray를 그려준다.
+            Gizmos.DrawRay(transform.position, transform.forward * _maxDistance);
+        }
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -47,6 +74,7 @@ public class Enemy : EnemyBase
         {
             EnterIdle();
         }
+
         switch (state)
         {
             case State.Idle:    Idle();
@@ -55,7 +83,10 @@ public class Enemy : EnemyBase
                 break; 
             case State.Battle:  Battle();
                 break;
+            case State.Die:     EnemyDie();
+                break;
         }
+
     }
 
     void Idle()
@@ -74,8 +105,8 @@ public class Enemy : EnemyBase
     void Move()
     {
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        agent.SetDestination(target.position); 
-
+        agent.SetDestination(target.position);
+        agent.stoppingDistance = 2;                     //enemy가 멈추는 거리
         if (distanceToTarget <= distance_MoveToBattle)  //공격가능 거리 안에 들어오면 Battle로 변경
         {
             EnterBattle(); // Battle 상태로 전환 시 추가적인 동작 수행
@@ -85,19 +116,34 @@ public class Enemy : EnemyBase
     void Battle()
     {
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        // 플레이어를 감지하기 위해 Ray를 사용
+        LookAtPlayer();
+
+        //Battle중에서의 상태 변경
+        if (distanceToTarget > distance_MoveToBattle)  //플레이어가 멀어지면 Move로 변경
+        {
+            EnterMove();
+        }
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+        if (Physics.BoxCast(transform.position, transform.lossyScale / 2.0f, transform.forward, out hit, transform.rotation, _maxDistance))
         {
             if (hit.collider.CompareTag("Player"))
             {
-                EnterBattle();
+                //앞에 플레이어가 있으니 공격 ㄱㄱ
             }
         }
         else
         {
-            EnterMove();
+            //EnterMove();
         }
+    }
+    
+    //Battle에서 사용하는 플레이어를 바라보는 함수
+    void LookAtPlayer()
+    {
+        Vector3 followPlayer = (target.position - transform.position).normalized;
+        followPlayer.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(followPlayer);
+        transform.rotation = targetRotation;
     }
 
     #region State 변경 함수
@@ -127,4 +173,13 @@ public class Enemy : EnemyBase
         Debug.Log("Entering Battle state.");
     }
     #endregion
+
+    protected override void EnemyDie()
+    {
+        base.EnemyDie();
+        isAttacking = false;
+        isInteract = true;
+        state = State.Die;
+        anim.SetBool(IsDieHash, true);
+    }
 }
