@@ -170,9 +170,9 @@ public class Enemy : EnemyBase
     {
         isInteract = true;          //중복 공격 방지
         int pattern = Random.Range(1, 5);
-        anim.SetInteger(AttackPatternHash, testPattern);
-        //testPattern = pattern;
-        //anim.SetInteger(AttackPatternHash, pattern);
+        //anim.SetInteger(AttackPatternHash, testPattern);
+        testPattern = pattern;
+        anim.SetInteger(AttackPatternHash, pattern);
         yield return null;
     }
 
