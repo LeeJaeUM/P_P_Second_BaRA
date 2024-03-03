@@ -38,6 +38,10 @@ public class Enemy : EnemyBase
     public CapsuleCollider rightHandCollider;
     public Collider groundAttackCollider;
 
+    [Header("Attack Particle")]
+    public GameObject groundParticle;
+
+    [Header("Debug Ray")]
     // ray의 길이
     [SerializeField]
     private float _maxDistance = 3.0f;      //Ray의 최대 길이
@@ -154,6 +158,8 @@ public class Enemy : EnemyBase
         isInteract = true;          //중복 공격 방지
         int pattern = Random.Range(1, 5);
         testPattern = pattern;
+        //test
+        pattern = 4;
         anim.SetInteger(AttackPatternHash, pattern);
         yield return null;
     }
@@ -201,6 +207,12 @@ public class Enemy : EnemyBase
         yield return new WaitForSeconds(0.15f);
         atkCollider.enabled = false;
         isAttacking = false;
+    }
+
+    void Particle_Ground()
+    {
+        ParticleSystem ps = groundParticle.GetComponent<ParticleSystem>();
+        ps.Play();
     }
     #endregion
 

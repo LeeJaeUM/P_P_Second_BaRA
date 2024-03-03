@@ -1252,14 +1252,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3995253418792089948, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
+      propertyPath: lengthInSec
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995253418792089948, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995253419158339676, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995253425332844590, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995253425668726246, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6690319738920271567, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1647201012}
-    - target: {fileID: 6690319738920271567, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
-      propertyPath: _maxDistance
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 8365359116665434368, guid: 30eff7019eb959b4d8be5fec35d3e136, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
