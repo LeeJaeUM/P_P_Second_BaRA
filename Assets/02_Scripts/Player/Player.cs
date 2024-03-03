@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
     private int curCombo = 0;
     [SerializeField]
     private bool isAttack = false;
-    WaitForSeconds attackableTime = new WaitForSeconds(0.8f);
+    WaitForSeconds attackableTime = new WaitForSeconds(0.1f);
 
     public bool isLockon = false;
 

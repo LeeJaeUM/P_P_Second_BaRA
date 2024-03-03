@@ -89,7 +89,7 @@ public class Enemy : EnemyBase
                 break; 
             case State.Battle:  Battle();
                 break;
-            case State.Die:     EnemyDie();
+            case State.Die:    // EnemyDie();
                 break;
         }
 

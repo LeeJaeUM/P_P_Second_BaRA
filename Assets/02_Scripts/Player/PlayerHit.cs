@@ -14,13 +14,14 @@ public class PlayerHit : MonoBehaviour
     GameManager gameManager;
 
     public Action<float, Transform> OnPlayerHit;    //Player에서 패리에 사용
+    public  Rigidbody rigid;
 
     private void Awake()
     {
         hitCols = GameManager.Instance.Player.GetComponentsInChildren<HitCollider>();
         gameManager = GameManager.Instance;
 
-
+        rigid = GameManager.Instance.Player.GetComponentInParent<Rigidbody>();
     }
     private void Start()
     {
@@ -29,6 +30,7 @@ public class PlayerHit : MonoBehaviour
             hitCols[i].OnHit += OnHit;
         }
     }
+    Vector3 pushPlayerVec = Vector3.zero;
 
     void OnHit(string name, float damageMul, float damage, Transform particleTr)
     {
@@ -41,8 +43,10 @@ public class PlayerHit : MonoBehaviour
 
         Debug.Log($"배율 {damageMul}, {name} 이 맞았다. 데미지는 {finalDamage}");
         OnPlayerHit?.Invoke(finalDamage, particleTr);
-    }
 
+        pushPlayerVec =  transform.position - particleTr.position;
+        StartCoroutine(PushPlayer());
+    }
     //피격 활성화 코루틴
     IEnumerator ResetHitAbleTimeCo()
     {
@@ -50,4 +54,10 @@ public class PlayerHit : MonoBehaviour
         gameManager.isPlayerHit = false;
     }
 
+    IEnumerator PushPlayer()
+    {
+        pushPlayerVec.y = 0;
+        rigid.AddForce(pushPlayerVec * 1.5f, ForceMode.Impulse);
+        yield return null;
+    }
 }

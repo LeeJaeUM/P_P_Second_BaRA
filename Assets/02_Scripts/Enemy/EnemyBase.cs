@@ -83,7 +83,7 @@ public class EnemyBase : MonoBehaviour
     {
         hitCollider.enabled = false;
         onEnemyDie?.Invoke();
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 5f);
     }
 
     void AddPlayerGold()
