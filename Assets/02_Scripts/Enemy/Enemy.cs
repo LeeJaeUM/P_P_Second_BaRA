@@ -27,8 +27,12 @@ public class Enemy : EnemyBase
     readonly int DieHash = Animator.StringToHash("Die");
     [SerializeField]
     private bool isInteract = false;    //공격 패턴 시 연속 공격 제한
+    [SerializeField]
+    private bool isRotateAble = true;
+    public float rotationSpeed = 2;
 
     public int testPattern = 0;
+
     // ray의 길이
     [SerializeField]
     private float _maxDistance = 3.0f;      //Ray의 최대 길이
@@ -119,15 +123,15 @@ public class Enemy : EnemyBase
     {
         float distanceToTarget = Vector3.Distance(transform.position, target.position);       
         //Battle중에서의 상태 변경
-        if (distanceToTarget > distance_MoveToBattle && !isInteract)  //플레이어가 멀어지면 Move로 변경, 공격(행동) 중이 아닐 때
+        if (!isInteract && distanceToTarget > distance_MoveToBattle + 0.5f)  //플레이어가 멀어지면 Move로 변경, 공격(행동) 중이 아닐 때
         {
             EnterMove();
         }
 
-        if (!isInteract)     //공격 중이 아닐 때 플레이어 바라보기
+        if (isRotateAble)     //공격 중이 아닐 때 플레이어 바라보기
             LookAtPlayer();
         RaycastHit hit;
-        if (Physics.BoxCast(transform.position, transform.lossyScale / 2.0f, transform.forward, out hit, transform.rotation, _maxDistance))
+        if (Physics.BoxCast(transform.position, transform.lossyScale * 0.4f, transform.forward, out hit, transform.rotation, _maxDistance))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -152,12 +156,20 @@ public class Enemy : EnemyBase
         Vector3 followPlayer = (target.position - transform.position).normalized;
         followPlayer.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(followPlayer);
-        transform.rotation = targetRotation;
+        //transform.rotation = targetRotation;
+        // 현재 회전에서 목표 회전까지 부드럽게 회전시키기
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
 
     void AttackEnd()
     {
         isInteract = false;
+        isRotateAble = true;
+    }
+
+    void StopLookAtPlayer()
+    {
+        isRotateAble = false;
     }
 
     protected override void EnemyDie()
@@ -185,6 +197,7 @@ public class Enemy : EnemyBase
         state = State.Move;
 
         anim.SetBool(IsMoveHash, true);
+        anim.SetBool(IsBattleInHash, false);
         Debug.Log("Entering Move state.");
     }
 
